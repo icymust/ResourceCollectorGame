@@ -4,7 +4,8 @@ const state = require('./state');
 const RESOURCE_TYPES = [
   { type: 'gold',   points: 3, rarity: 0.10, color: '#FFD700', symbol: '💰' },
   { type: 'silver', points: 2, rarity: 0.20, color: '#C0C0C0', symbol: '💵' },
-  { type: 'bronze', points: 1, rarity: 0.70, color: '#B8621E', symbol: '🪙' },
+  { type: 'bronze', points: 1, rarity: 0.67, color: '#B8621E', symbol: '🪙' },
+  { type: 'diamond', points: 10, rarity: 0.03, color: '#68dbfaff', symbol: '💎' },
 ];
 
 let spawnIntervalId = null;

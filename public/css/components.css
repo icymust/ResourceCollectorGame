@@ -55,6 +55,16 @@
   box-shadow: 0 0 0px #B8621E, 0 0 12px rgba(184, 98, 30, 0.2);
 }
 
+.resource[title*="diamond"] {
+  box-shadow: 0 0 0px #68dbfaff, 0 0 12px rgba(64, 200, 254, 0.2);
+  animation: diamondPulse 1s infinite;
+}
+
+@keyframes diamondPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+
 @keyframes goldPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }

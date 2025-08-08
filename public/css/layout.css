@@ -354,6 +354,11 @@ kbd {
   box-shadow: 0 0 10px rgba(184, 98, 30, 0.4);
 }
 
+.resource-icon.diamond {
+  background: linear-gradient(45deg, #68dbfaff, #4FC3F7);
+  box-shadow: 0 0 20px rgba(104, 219, 250, 0.6);
+}
+
 .resource-info {
   display: flex;
   flex-direction: column;
