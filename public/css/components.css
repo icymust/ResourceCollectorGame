@@ -52,7 +52,7 @@
 }
 
 .resource[title*="bronze"] {
-  box-shadow: 0 0 4px #B8621E, 0 0 12px rgba(184, 98, 30, 0.2);
+  box-shadow: 0 0 2px #B8621E, 0 0 12px rgba(184, 98, 30, 0.2);
 }
 
 @keyframes goldPulse {
@@ -119,7 +119,7 @@ button {
 #quit-btn {
   position: fixed;
   top: 10px;
-  right: 40px;
+  right: 120px;
   padding: 8px 12px;
   border: none;
   border-radius: 6px;

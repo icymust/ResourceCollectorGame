@@ -17,6 +17,9 @@ let quitBtn = null;
 let quitModal = null;
 let quitYes = null;
 let quitNo = null;
+let helpBtn = null;
+let helpModal = null;
+let helpClose = null;
 
 export function bindUI() {
   // Получаем DOM элементы
@@ -36,6 +39,9 @@ export function bindUI() {
   quitModal = document.getElementById('quit-modal');
   quitYes = document.getElementById('quit-yes');
   quitNo = document.getElementById('quit-no');
+  helpBtn = document.getElementById('help-btn');
+  helpModal = document.getElementById('help-modal');
+  helpClose = document.getElementById('help-close');
 
   // Привязываем обработчики
   setupColorPicker();
@@ -43,6 +49,7 @@ export function bindUI() {
   setupGameTimeInputs();
   setupStartButton();
   setupQuitModal();
+  setupHelpModal();
 }
 
 function setupColorPicker() {
@@ -102,6 +109,49 @@ function setupQuitModal() {
     closeQuitModal();
     net.emitQuit(state.playerName || 'Unknown');
   });
+}
+
+function setupHelpModal() {
+  helpBtn.addEventListener('click', toggleHelpModal);
+  helpClose.addEventListener('click', closeHelpModal);
+  
+  // Закрытие по клику вне модального окна
+  helpModal.addEventListener('click', (e) => {
+    if (e.target === helpModal) {
+      closeHelpModal();
+    }
+  });
+  
+  // Закрытие по Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && helpModal.style.display === 'flex') {
+      closeHelpModal();
+    }
+  });
+}
+
+function toggleHelpModal() {
+  if (helpModal.style.display === 'flex') {
+    closeHelpModal();
+  } else {
+    openHelpModal();
+  }
+}
+
+function openHelpModal() {
+  helpModal.style.display = 'flex';
+  helpBtn.textContent = '×';
+  helpBtn.classList.add('close');
+  helpBtn.title = 'Close Help';
+  document.body.style.overflow = 'hidden'; // Предотвращаем скролл фона
+}
+
+function closeHelpModal() {
+  helpModal.style.display = 'none';
+  helpBtn.textContent = '?';
+  helpBtn.classList.remove('close');
+  helpBtn.title = 'Help & Instructions';
+  document.body.style.overflow = 'hidden'; // Оставляем скролл заблокированным
 }
 
 export function openQuitModal() {

@@ -161,6 +161,214 @@
   transform: scale(1.1);
 }
 
+/* ===== МОДАЛЬНОЕ ОКНО ПОМОЩИ ===== */
+#help-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+.help-card {
+  background: white;
+  border-radius: 15px;
+  width: min(90vw, 600px);
+  max-height: min(85vh, 700px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: helpModalIn 0.3s ease;
+}
+
+@keyframes helpModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+}
+
+.help-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.help-content {
+  padding: 25px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.help-section {
+  margin-bottom: 25px;
+}
+
+.help-section:last-child {
+  margin-bottom: 0;
+}
+
+.help-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.2rem;
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+.help-section p {
+  margin: 0 0 10px 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.help-section ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #666;
+}
+
+.help-section li {
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+/* ===== СЕТКА УПРАВЛЕНИЯ ===== */
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.control-item span {
+  color: #000;
+  font-weight: 500;
+}
+
+kbd {
+  background: #343a40;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== СЕТКА РЕСУРСОВ ===== */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.resource-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.resource-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: normal;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.resource-icon.gold {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.resource-icon.silver {
+  background: linear-gradient(45deg, #C0C0C0, #A8A8A8);
+  box-shadow: 0 0 12px rgba(192, 192, 192, 0.4);
+}
+
+.resource-icon.bronze {
+  background: linear-gradient(45deg, #B8621E, #8B4513);
+  box-shadow: 0 0 10px rgba(184, 98, 30, 0.4);
+}
+
+.resource-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-info strong {
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.resource-info span {
+  color: #000;
+  font-size: 0.9rem;
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   #timer {
@@ -186,10 +394,31 @@
     height: 14px;
   }
   
+  .help-card {
+    width: 95vw;
+    max-height: 90vh;
+  }
+  
+  .help-header {
+    padding: 15px 20px;
+  }
+  
+  .help-content {
+    padding: 20px;
+  }
+  
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+  
   #game-board {
     grid-template-columns: repeat(20, 25px);
     grid-template-rows: repeat(20, 25px);
     width: 530px;
-    margin-top: 80px; /* Больше места для элементов сверху */
+    margin-top: 80px;
   }
 }

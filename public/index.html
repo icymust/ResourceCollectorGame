@@ -15,7 +15,10 @@
 
   <!-- 🛋️ Лобби -->
   <div id="lobby">
-    <h2>Lobby</h2>
+    <div class="lobby-header">
+      <h2 class="game-title">🎮 Game Lobby</h2>
+      <button id="help-btn" title="Help & Instructions">?</button>
+    </div>
     
     <!-- Контейнер для карточек игроков -->
     <div class="players-section">
@@ -39,7 +42,6 @@
       </div>
       <small>👑 Host only - Set the duration for each game round</small>
     </div>
-
 
     <div id="player-setup">
       <div class="player-setup-content">
@@ -81,6 +83,90 @@
       <div class="qm-actions">
         <button id="quit-yes" class="danger">Yes, end game</button>
         <button id="quit-no">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ❓ Модалка с инструкциями -->
+  <div id="help-modal" aria-modal="true" role="dialog">
+    <div class="help-card">
+      <div class="help-header">
+        <h3>🎮 Game Instructions</h3>
+        <button id="help-close" class="close-btn">×</button>
+      </div>
+      <div class="help-content">
+        <div class="help-section">
+          <h4>🎯 Objective</h4>
+          <p>Collect resources on the field to earn points. The player with the most points wins!</p>
+        </div>
+        
+        <div class="help-section">
+          <h4>🕹️ Controls</h4>
+          <div class="controls-grid">
+            <div class="control-item">
+              <kbd>W</kbd> <kbd>↑</kbd>
+              <span>Move Up</span>
+            </div>
+            <div class="control-item">
+              <kbd>A</kbd> <kbd>←</kbd>
+              <span>Move Left</span>
+            </div>
+            <div class="control-item">
+              <kbd>S</kbd> <kbd>↓</kbd>
+              <span>Move Down</span>
+            </div>
+            <div class="control-item">
+              <kbd>D</kbd> <kbd>→</kbd>
+              <span>Move Right</span>
+            </div>
+            <div class="control-item">
+              <kbd>P</kbd>
+              <span>Pause/Resume</span>
+            </div>
+            <div class="control-item">
+              <kbd>ESC</kbd>
+              <span>Quit Game</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="help-section">
+          <h4>💰 Resources & Points</h4>
+          <div class="resources-grid">
+            <div class="resource-item">
+              <div class="resource-icon gold">💰</div>
+              <div class="resource-info">
+                <strong>Gold</strong>
+                <span>+3 points</span>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon silver">💵</div>
+              <div class="resource-info">
+                <strong>Silver</strong>
+                <span>+2 points</span>
+              </div>
+            </div>
+            <div class="resource-item">
+              <div class="resource-icon bronze">🪙</div>
+              <div class="resource-info">
+                <strong>Bronze</strong>
+                <span>+1 point</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="help-section">
+          <h4>📋 Game Rules</h4>
+          <ul>
+            <li>Move around the 20x20 grid to collect resources</li>
+            <li>Different resources give different points</li>
+            <li>Resources respawn randomly across the field</li>
+            <li>Game ends when time runs out</li>
+            <li>Player with highest score wins!</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
