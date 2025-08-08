@@ -1,6 +1,40 @@
 # ResourceCollectorGame
 Web Game for Kood Johvi
 
+## Быстрый запуск
+
+### Способ 1: Автоматический скрипт (рекомендуется)
+```bash
+# macOS/Linux
+./start.sh
+
+# Windows
+start.bat
+
+# Универсальный (любая ОС)
+node start.js
+```
+
+### Способ 2: NPM команды
+```bash
+# Установка зависимостей (если нужно)
+npm install
+
+# Запуск сервера
+npm start
+# или
+npm run dev
+```
+
+### Способ 3: Ручной запуск
+```bash
+# Установка зависимостей
+npm install
+
+# Запуск сервера
+node src/server.js
+```
+
 ## Установка
 
 ### Предварительные требования
