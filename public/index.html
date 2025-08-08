@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Resource Collector</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resource Collector Game</title>
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/lobby.css" />
 </head>
 <body>
   <h1>Resource Collector</h1>
@@ -14,21 +16,47 @@
   <!-- 🛋️ Лобби -->
   <div id="lobby">
     <h2>Lobby</h2>
-    <ul id="player-list"></ul>
+    
+    <!-- Контейнер для карточек игроков -->
+    <div class="players-section">
+      <div class="section-header">
+        <h3>👥 Players</h3>
+        <span class="player-count">0/4</span>
+      </div>
+      <div id="players-grid" class="players-grid">
+        <!-- Карточки игроков будут добавляться динамически -->
+      </div>
+    </div>
 
     <!-- Панель настроек хоста -->
-    <div id="host-controls" style="display:none; margin:10px 0;">
-    <label><b>Round time:</b></label>
-      <input type="number" id="round-minutes" min="0" max="59" step="1" value="1" style="width:60px;"> min
-      <input type="number" id="round-seconds" min="0" max="59" step="5" value="0" style="width:60px;"> sec
-      <small style="display:block; opacity:0.7;">(Host only)</small>
+    <div id="host-controls" style="display:none;">
+      <label>⏱️ Round time:</label>
+      <div class="time-controls">
+        <input type="number" id="round-minutes" min="0" max="59" step="1" value="1">
+        <span>min</span>
+        <input type="number" id="round-seconds" min="0" max="59" step="5" value="0">
+        <span>sec</span>
+      </div>
+      <small>👑 Host only - Set the duration for each game round</small>
     </div>
 
 
     <div id="player-setup">
-      <input type="text" id="name-input" placeholder="Enter your name" />
-      <input type="color" id="color-picker" value="#ff0000" />
-      <button id="ready-btn">✅ Ready</button>
+      <div class="player-setup-content">
+        <div class="input-group">
+          <label for="name-input">Enter your name</label>
+          <input type="text" id="name-input" placeholder="Player name..." />
+        </div>
+        
+        <div class="color-group">
+          <label for="color-picker">Choose your color</label>
+          <div class="color-wrapper">
+            <input type="color" id="color-picker" value="#ff0000" />
+          </div>
+        </div>
+        
+        <button id="ready-btn">✅ Ready</button>
+      </div>
     </div>
 
     <button id="start-game-btn" style="display:none;">▶️ Start Game</button>

@@ -21,12 +21,9 @@ export const KEYS = {
 export const GAME_LIMITS = {
   MIN_TIME: 15,
   MAX_TIME: 900,
-  MIN_PLAYERS: 1
+  MIN_PLAYERS: 1,
+  MAX_PLAYERS: 4
 };
 
-// Типы ресурсов (клиентская копия для отображения)
-export const RESOURCE_TYPES = {
-  gold: { points: 3, color: '#FFD700', symbol: '💰' },
-  silver: { points: 2, color: '#C0C0C0', symbol: '⚡' },
-  bronze: { points: 1, color: '#CD7F32', symbol: '🔥' }
-};
+// Типы ресурсов определяются на сервере и приходят через сокеты
+// Никакого дублирования констант!

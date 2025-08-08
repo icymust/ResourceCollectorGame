@@ -115,6 +115,33 @@ export function closeQuitModal() {
   quitModal.style.display = 'none';
 }
 
+// Функция для создания карточки игрока
+function createPlayerCard(player) {
+  return `
+    <div class="player-card ${player.ready ? 'ready' : ''} ${player.isHost ? 'host' : ''}" data-id="${player.id}">
+      <div class="player-info">
+        <div class="player-color" style="background-color: ${player.color}"></div>
+        <div class="player-details">
+          <h4>${player.name}</h4>
+          <div class="player-status ${player.ready ? 'status-ready' : 'status-waiting'}">
+            ${player.ready ? '✅ Ready' : '⏳ Waiting'}
+            ${player.isHost ? ' • Host' : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Обновление списка игроков
+function updatePlayersList(players) {
+  const playersGrid = document.getElementById('players-grid');
+  const playerCount = document.querySelector('.player-count');
+  
+  playersGrid.innerHTML = players.map(createPlayerCard).join('');
+  playerCount.textContent = `${players.length}/4`;
+}
+
 export function updateLobby(data) {
   const players = data.players;
   setHostId(data.hostId);
@@ -141,18 +168,12 @@ export function updateLobby(data) {
     roundSecondsInput.value = secs;
   }
 
-  // Список игроков
-  playerList.innerHTML = '';
-  players.forEach((p) => {
-    const isHost = p.id === data.hostId;
-    const li = document.createElement('li');
-    li.innerHTML = `
-      <span style="display:inline-block;width:16px;height:16px;background:${p.color};border:1px solid #000;margin-right:5px;"></span>
-      ${p.name} ${isHost ? '👑<span style="color:gold;">(Host)</span>' : ''}
-      - ${p.ready ? '<span style="color:green;">✅ Ready</span>' : '<span style="color:red;">❌ Not ready</span>'}
-    `;
-    playerList.appendChild(li);
-  });
+  // Обновляем карточки игроков
+  const playersWithHostInfo = players.map(p => ({
+    ...p,
+    isHost: p.id === data.hostId
+  }));
+  updatePlayersList(playersWithHostInfo);
 
   // Кнопка старта
   const allReady = players.length > 0 && players.every(p => p.ready);

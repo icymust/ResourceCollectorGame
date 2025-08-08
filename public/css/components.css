@@ -15,14 +15,20 @@
 }
 
 .cell.player {
-  background: tomato;
   border: 2px solid #000;
+  z-index: 2; /* игрок поверх ресурса */
 }
 
 .cell.resource {
-  background: gold;
+  /* Базовый цвет, который может быть переопределен через style.backgroundColor */
+  background-color: #FFD700;
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(0,0,0,0.4);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* Когда игрок стоит на ресурсе - приоритет цвета игрока */
+.cell.player {
+  border-radius: 0 !important; /* убираем круглую форму у игрока */
 }
 
 /* Ресурсы с типами */
@@ -36,17 +42,17 @@
 }
 
 .resource[title*="gold"] {
-  box-shadow: 0 0 8px #FFD700;
+  box-shadow: 0 0 15px #FFD700, 0 0 30px rgba(255, 215, 0, 0.3);
   animation: goldPulse 2s infinite;
 }
 
 .resource[title*="silver"] {
-  box-shadow: 0 0 6px #C0C0C0;
+  box-shadow: 0 0 12px #C0C0C0, 0 0 25px rgba(192, 192, 192, 0.3);
   animation: silverPulse 2.5s infinite;
 }
 
 .resource[title*="bronze"] {
-  box-shadow: 0 0 4px #CD7F32;
+  box-shadow: 0 0 4px #B8621E, 0 0 12px rgba(184, 98, 30, 0.2);
 }
 
 @keyframes goldPulse {
@@ -200,7 +206,7 @@ button {
 
 /* Поля ввода */
 input[type="text"], input[type="color"], input[type="number"] {
-  padding: 8px;
+  /* padding: 8px; */
   border: 1px solid #ccc;
   border-radius: 4px;
   margin: 4px;
