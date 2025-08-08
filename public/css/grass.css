@@ -1,0 +1,377 @@
+/* 🌿 Grass texture styles for the game field */
+
+/* Основной стиль игрового поля с травой */
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(20, 30px);
+  grid-template-rows: repeat(20, 30px);
+  gap: 0;
+  margin: 40px auto;
+  width: 630px;
+  /* height: 600px; */
+  border: 8px solid #2d5016;
+  border-radius: 20px;
+  /* padding: 8px; */
+  position: relative;
+  box-shadow: 
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    inset 0 0 60px rgba(255, 255, 255, 0.1),
+    0 0 0 2px #4a7c2a,
+    0 0 0 4px #2d5016;
+  
+  /* Базовый градиент поля - натуральные оттенки травы */
+  /* background: 
+    linear-gradient(135deg, #4a7c59 0%, #5d8a6b 25%, #6b9577 50%, #5d8a6b 75%, #4a7c59 100%); */
+  
+  /* Многослойная текстура травы */
+  background-image: 
+    /* Крупные травинки - вертикальные */
+    linear-gradient(90deg, transparent 75%, rgba(60, 120, 60, 0.4) 76%, rgba(60, 120, 60, 0.4) 78%, transparent 79%),
+    linear-gradient(85deg, transparent 70%, rgba(80, 140, 80, 0.3) 71%, rgba(80, 140, 80, 0.3) 73%, transparent 74%),
+    linear-gradient(95deg, transparent 72%, rgba(70, 130, 70, 0.35) 73%, rgba(70, 130, 70, 0.35) 75%, transparent 76%),
+    
+    /* Диагональные травинки */
+    linear-gradient(45deg, transparent 65%, rgba(90, 150, 90, 0.2) 66%, rgba(90, 150, 90, 0.2) 68%, transparent 69%),
+    linear-gradient(135deg, transparent 68%, rgba(85, 145, 85, 0.25) 69%, rgba(85, 145, 85, 0.25) 71%, transparent 72%),
+    
+    /* Мелкие детали и точки */
+    radial-gradient(circle at 20% 30%, rgba(120, 180, 120, 0.3) 0.5px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(100, 160, 100, 0.2) 0.5px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(110, 170, 110, 0.25) 0.5px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(130, 190, 130, 0.2) 0.5px, transparent 1px),
+    
+    /* Тени и глубина */
+    radial-gradient(ellipse at 30% 70%, rgba(40, 80, 40, 0.1) 2px, transparent 4px),
+    radial-gradient(ellipse at 70% 30%, rgba(35, 75, 35, 0.1) 3px, transparent 6px);
+  
+  background-size: 
+    8px 8px,   /* Крупные вертикальные травинки */
+    10px 10px,  
+    6px 6px,   
+    12px 12px, /* Диагональные */
+    14px 14px, 
+    15px 15px, /* Мелкие точки */
+    20px 20px, 
+    18px 18px, 
+    25px 25px, 
+    30px 30px, /* Тени */
+    35px 35px;
+  
+  /* Анимация легкого колыхания травы - убрана для плавности */
+  /* animation: grassSway 12s ease-in-out infinite; */
+}
+
+/* Анимация колыхания травы на ветру */
+@keyframes grassSway {
+  0%, 100% { 
+    background-position: 
+      0px 0px, 2px 2px, 0px 0px,        /* Вертикальные */
+      5px 5px, 3px 7px,                 /* Диагональные */
+      10px 10px, 15px 15px, 12px 18px, 20px 8px,  /* Точки */
+      25px 25px, 30px 30px;             /* Тени */
+  }
+  25% {
+    background-position: 
+      1px 0px, 3px 1px, 1px 1px,
+      6px 4px, 4px 8px,
+      11px 9px, 16px 14px, 13px 19px, 21px 7px,
+      26px 24px, 31px 29px;
+  }
+  50% { 
+    background-position: 
+      2px 1px, 4px 2px, 1px 1px,
+      7px 6px, 5px 9px,
+      12px 8px, 17px 13px, 14px 20px, 22px 6px,
+      27px 23px, 32px 28px;
+  }
+  75% {
+    background-position: 
+      1px 1px, 3px 3px, 0px 1px,
+      6px 5px, 4px 8px,
+      11px 9px, 16px 14px, 13px 19px, 21px 7px,
+      26px 24px, 31px 29px;
+  }
+}
+
+/* Улучшенные стили для клеток поля */
+.cell {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  position: relative;
+}
+
+/* Игроки на травяном поле */
+.cell.player {
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  border: 3px solid #000;
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 
+    0 3px 12px rgba(0, 0, 0, 0.5),
+    0 0 0 2px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  /* Убираем transition для плавности движения */
+  /* transition: all 0.2s ease; */
+}
+
+/* Убираем hover эффект для игроков */
+/* .cell.player:hover {
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    0 0 0 3px rgba(255, 255, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+} */
+
+/* Ресурсы на травяном поле */
+.cell.resource {
+  background-color: transparent;
+  border-radius: 50%;
+  position: relative;
+}
+
+/* Базовый стиль для всех ресурсов */
+.resource {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(255, 255, 255, 0.3);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  position: relative;
+  /* Убираем transition для плавности */
+  /* transition: all 0.3s ease; */
+}
+
+/* Специальные эффекты для золота */
+.resource[title*="gold"] {
+  background: radial-gradient(circle, #FFD700 0%, #FFA500 100%);
+  box-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.6),
+    0 3px 8px rgba(0, 0, 0, 0.3);
+  /* Убираем анимацию */
+  /* animation: goldGlow 2s ease-in-out infinite; */
+}
+
+/* Убираем hover эффект для золота */
+/* .resource[title*="gold"]:hover {
+  transform: scale(1.1);
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 5px 12px rgba(0, 0, 0, 0.4);
+} */
+
+/* Специальные эффекты для серебра */
+.resource[title*="silver"] {
+  background: radial-gradient(circle, #C0C0C0 0%, #A0A0A0 100%);
+  box-shadow: 
+    0 0 12px rgba(192, 192, 192, 0.5),
+    0 3px 8px rgba(0, 0, 0, 0.3);
+  /* Убираем анимацию */
+  /* animation: silverGlow 2.5s ease-in-out infinite; */
+}
+
+/* Убираем hover эффект для серебра */
+/* .resource[title*="silver"]:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 16px rgba(192, 192, 192, 0.7),
+    0 4px 10px rgba(0, 0, 0, 0.4);
+} */
+
+/* Специальные эффекты для бронзы */
+.resource[title*="bronze"] {
+  background: radial-gradient(circle, #CD7F32 0%, #B8621E 100%);
+  box-shadow: 
+    0 0 8px rgba(205, 127, 50, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.3);
+  /* Убираем анимацию */
+  /* animation: bronzeGlow 3s ease-in-out infinite; */
+}
+
+/* Убираем hover эффект для бронзы */
+/* .resource[title*="bronze"]:hover {
+  transform: scale(1.03);
+  box-shadow: 
+    0 0 12px rgba(205, 127, 50, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.4);
+} */
+
+/* Анимации для ресурсов */
+@keyframes goldGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+    transform: scale(1.02);
+  }
+}
+
+@keyframes silverGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 6px rgba(192, 192, 192, 0.5));
+    opacity: 1;
+  }
+  50% { 
+    filter: drop-shadow(0 0 12px rgba(192, 192, 192, 0.7));
+    opacity: 0.9;
+  }
+}
+
+@keyframes bronzeGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 4px rgba(205, 127, 50, 0.4));
+  }
+  50% { 
+    filter: drop-shadow(0 0 8px rgba(205, 127, 50, 0.6));
+  }
+}
+
+/* Эффект появления ресурса */
+@keyframes resourceSpawn {
+  0% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(90deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.resource.spawning {
+  animation: resourceSpawn 0.5s ease-out;
+}
+
+/* Адаптивность для разных экранов */
+@media (max-width: 768px) {
+  #game-board {
+    width: 500px;
+    height: 500px;
+    grid-template-columns: repeat(20, 25px);
+    grid-template-rows: repeat(20, 25px);
+    margin: 20px auto;
+    border: 6px solid #2d5016;
+    padding: 6px;
+  }
+  
+  .cell {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
+  
+  .resource {
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #game-board {
+    width: 400px;
+    height: 400px;
+    grid-template-columns: repeat(20, 20px);
+    grid-template-rows: repeat(20, 20px);
+    margin: 15px auto;
+    border: 4px solid #2d5016;
+    padding: 4px;
+  }
+  
+  .cell {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+  }
+  
+  .resource {
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+  }
+}
+
+/* Дополнительные эффекты для атмосферы - убираем анимацию */
+#game-board::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  background: linear-gradient(45deg, 
+    rgba(74, 124, 89, 0.3) 0%,
+    rgba(107, 149, 119, 0.2) 50%,
+    rgba(74, 124, 89, 0.3) 100%
+  );
+  border-radius: 24px;
+  z-index: -1;
+  opacity: 0.4;
+  /* Убираем анимацию */
+  /* animation: fieldAura 8s ease-in-out infinite; */
+}
+
+@keyframes fieldAura {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+/* Стиль для границы поля */
+#game-board {
+  border: 4px solid;
+  border-image: linear-gradient(45deg, 
+    #2d5016 0%, 
+    #4a7c2a 25%, 
+    #5d8a3d 50%, 
+    #4a7c2a 75%, 
+    #2d5016 100%
+  ) 1;
+}
+
+/* Эффект росы на траве (статичный) */
+#game-board::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.1) 1px, transparent 2px),
+    radial-gradient(circle at 65% 45%, rgba(255, 255, 255, 0.08) 1px, transparent 2px),
+    radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.12) 1px, transparent 2px),
+    radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.09) 1px, transparent 2px);
+  background-size: 40px 40px, 60px 60px, 35px 35px, 55px 55px;
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0.5;
+  /* Убираем анимацию росы */
+  /* animation: dewGlisten 6s ease-in-out infinite; */
+}
+
+/* Убираем анимации - оставляем их в коде для возможной активации в будущем */
+/* @keyframes dewGlisten {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+} */
