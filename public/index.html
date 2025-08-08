@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Resource Collector</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>Resource Collector</h1>
@@ -13,16 +13,28 @@
   <div id="lobby">
     <h2>Lobby</h2>
     <ul id="player-list"></ul>
+
+    <!-- Панель настроек хоста -->
+    <div id="host-controls" style="display:none; margin:10px 0;">
+    <label><b>Round time:</b></label>
+      <input type="number" id="round-minutes" min="0" max="59" step="1" value="1" style="width:60px;"> min
+      <input type="number" id="round-seconds" min="0" max="59" step="5" value="0" style="width:60px;"> sec
+      <small style="display:block; opacity:0.7;">(Host only)</small>
+    </div>
+
+
     <div id="player-setup">
-      <input type="text" id="name-input" placeholder="Enter your name">
-      <input type="color" id="color-picker" value="#ff0000">
+      <input type="text" id="name-input" placeholder="Enter your name" />
+      <input type="color" id="color-picker" value="#ff0000" />
       <button id="ready-btn">✅ Ready</button>
     </div>
+
     <button id="start-game-btn" style="display:none;">▶️ Start Game</button>
   </div>
 
   <!-- 🎮 Игровое поле -->
   <div id="game-container">
+    <button id="quit-btn" title="End game for everyone">⛔ Quit Game</button>
     <div id="timer">Time: 60</div>
     <div id="scoreboard"></div>
     <div id="game-board"></div>
@@ -31,6 +43,19 @@
   <!-- ⏸ Оверлей паузы -->
   <div id="pause-overlay"></div>
 
+  <!-- 🔴 Модалка подтверждения выхода -->
+  <div id="quit-modal" aria-modal="true" role="dialog">
+    <div class="qm-card">
+      <h3>End game?</h3>
+      <p>This will end the game for everyone. Are you sure?</p>
+      <div class="qm-actions">
+        <button id="quit-yes" class="danger">Yes, end game</button>
+        <button id="quit-no">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Подключение скриптов -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="game.js"></script>
 </body>
