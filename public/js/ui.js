@@ -48,6 +48,7 @@ export function bindUI() {
   setupReadyButton();
   setupGameTimeInputs();
   setupStartButton();
+  setupPauseHandlers();
   setupQuitModal();
   setupHelpModal();
 }
@@ -253,12 +254,46 @@ export function showGameQuit(data) {
   location.reload();
 }
 
+// Настройка обработчиков для окна паузы
+function setupPauseHandlers() {
+  const resumeBtn = document.getElementById('resume-btn');
+  const quitFromPauseBtn = document.getElementById('quit-from-pause');
+
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', () => {
+      import('./net.js').then(({ emitPause }) => {
+        emitPause(false, state.playerName || 'Unknown');
+      });
+    });
+  }
+
+  if (quitFromPauseBtn) {
+    quitFromPauseBtn.addEventListener('click', () => {
+      // Скрываем окно паузы и показываем окно подтверждения выхода
+      pauseOverlay.style.display = 'none';
+      quitModal.style.display = 'flex';
+      setQuitModalOpen(true);
+    });
+  }
+}
+
 export function showPauseOverlay(data) {
-  pauseOverlay.style.display = 'flex';
-  pauseOverlay.textContent = data.paused
-    ? `⏸ Paused by ${data.by}`
-    : `▶️ Resumed by ${data.by}`;
-  if (!data.paused) {
-    setTimeout(() => (pauseOverlay.style.display = 'none'), 1000);
+  if (data.paused) {
+    pauseOverlay.style.display = 'flex';
+    // Обновляем заголовок с информацией о том, кто поставил на паузу
+    const pauseCard = pauseOverlay.querySelector('.pause-card h2');
+    if (pauseCard) {
+      pauseCard.textContent = `Игра на паузе (${data.by})`;
+    }
+  } else {
+    // Показываем уведомление о возобновлении игры
+    const pauseCard = pauseOverlay.querySelector('.pause-card h2');
+    if (pauseCard) {
+      pauseCard.textContent = `Игра возобновлена (${data.by})`;
+    }
+    // Скрываем через секунду
+    setTimeout(() => {
+      pauseOverlay.style.display = 'none';
+    }, 1000);
   }
 }
