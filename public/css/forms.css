@@ -1,0 +1,45 @@
+/* Формы и инпуты */
+
+input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 200px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #7289da;
+}
+
+.player-setup-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.player-setup-label {
+  color: var(--text-color);
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.player-setup-input {
+  flex: 1;
+  max-width: 200px;
+  padding: 8px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.player-setup-input:focus {
+  outline: none;
+  border-color: rgba(116, 137, 218, 0.6);
+  box-shadow: 0 0 0 3px rgba(116, 137, 218, 0.1);
+}

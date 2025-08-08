@@ -1,0 +1,49 @@
+/* Кнопки */
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#start-game-btn {
+  background: #43b581;
+  color: white;
+  margin-top: 20px;
+  padding: 10px 45%;
+}
+
+#start-game-btn:hover {
+  background: #369470;
+}
+
+#ready-btn {
+  background: #43b581;
+  color: white;
+}
+
+#ready-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+#quit-btn {
+  position: fixed;
+  top: 10px;
+  right: 120px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #f04747;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0,0,0,.15);
+  display: none;
+}
+
+#quit-btn:hover {
+  background: #e03838;
+}
