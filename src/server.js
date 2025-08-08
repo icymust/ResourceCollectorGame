@@ -80,28 +80,72 @@ server.listen(PORT, '0.0.0.0', () => {
   });
 });
 
+// Флаг для предотвращения множественного завершения
+let isShuttingDown = false;
+
+// Функция для graceful shutdown
+const gracefulShutdown = (signal) => {
+  if (isShuttingDown) {
+    console.log('⚠️ Завершение уже в процессе...');
+    return;
+  }
+  
+  isShuttingDown = true;
+  console.log(`\n🛑 Получен сигнал ${signal}, завершение сервера...`);
+  
+  // Устанавливаем таймаут для принудительного завершения
+  const forceShutdownTimer = setTimeout(() => {
+    console.log('⚠️ Принудительное завершение');
+    process.exit(1);
+  }, 3000);
+  
+  // Уведомляем клиентов о завершении работы
+  try {
+    io.emit('server_shutdown', { message: 'Сервер завершает работу' });
+  } catch (err) {
+    console.log('Клиентов для уведомления нет');
+  }
+  
+  // Закрываем HTTP сервер сначала
+  if (server.listening) {
+    server.close((err) => {
+      clearTimeout(forceShutdownTimer);
+      
+      if (err) {
+        console.error('❌ Ошибка при закрытии HTTP сервера:', err);
+      } else {
+        console.log('✅ HTTP сервер закрыт');
+      }
+      
+      // Закрываем Socket.IO соединения
+      io.close(() => {
+        console.log('✅ Socket.IO сервер закрыт');
+        console.log('✅ Сервер успешно остановлен');
+        process.exit(0);
+      });
+    });
+  } else {
+    // Если сервер уже не слушает, просто закрываем Socket.IO
+    clearTimeout(forceShutdownTimer);
+    io.close(() => {
+      console.log('✅ Socket.IO сервер закрыт');
+      console.log('✅ Сервер успешно остановлен');
+      process.exit(0);
+    });
+  }
+};
+
 // Обработка ошибок
 process.on('uncaughtException', (err) => {
   console.error('❌ Необработанная ошибка:', err);
+  gracefulShutdown('UNCAUGHT_EXCEPTION');
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('❌ Необработанное отклонение промиса:', reason);
+  gracefulShutdown('UNHANDLED_REJECTION');
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('🛑 Получен сигнал SIGTERM, завершение сервера...');
-  server.close(() => {
-    console.log('✅ Сервер успешно остановлен');
-    process.exit(0);
-  });
-});
-
-process.on('SIGINT', () => {
-  console.log('\n🛑 Получен сигнал SIGINT, завершение сервера...');
-  server.close(() => {
-    console.log('✅ Сервер успешно остановлен');
-    process.exit(0);
-  });
-});
+// Обработка сигналов завершения
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));

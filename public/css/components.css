@@ -99,6 +99,7 @@ button {
   background: #43b581;
   color: white;
   margin-top: 20px;
+  padding: 10px 45%;
 }
 
 #start-game-btn:hover {

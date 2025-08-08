@@ -6,7 +6,7 @@ let fpsEl = null;
 
 export function initFPS() {
   fpsEl = document.createElement('div');
-  fpsEl.style.cssText = 'position:fixed;left:8px;bottom:8px;background:rgba(0,0,0,.6);color:#0f0;padding:4px 6px;border-radius:4px;font:12px/1 monospace;z-index:9999';
+  fpsEl.style.cssText = 'position:fixed;right:50px;top:16px;background:rgba(34, 30, 63, 0.6);color:#0f0;padding:4px 6px;border-radius:4px;font:12px/1 monospace;z-index:9999';
   fpsEl.textContent = 'FPS: --';
   document.body.appendChild(fpsEl);
 
