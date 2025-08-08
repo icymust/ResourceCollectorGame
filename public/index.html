@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resource Collector</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Resource Collector</h1>
+  <div id="status-indicator" title="Disconnected"></div>
+
+  <!-- 🛋️ Лобби -->
+  <div id="lobby">
+    <h2>Lobby</h2>
+    <ul id="player-list"></ul>
+    <div id="player-setup">
+      <input type="text" id="name-input" placeholder="Enter your name">
+      <input type="color" id="color-picker" value="#ff0000">
+      <button id="ready-btn">✅ Ready</button>
+    </div>
+    <button id="start-game-btn" style="display:none;">▶️ Start Game</button>
+  </div>
+
+  <!-- 🎮 Игровое поле -->
+  <div id="game-container">
+    <div id="timer">Time: 60</div>
+    <div id="scoreboard"></div>
+    <div id="game-board"></div>
+  </div>
+
+  <!-- ⏸ Оверлей паузы -->
+  <div id="pause-overlay"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
