@@ -1,6 +1,7 @@
 import { state, setMyId, setConnected, setPaused, setPlayers, setResources } from './state.js';
-import { updatePlayers, updateResources } from './render.js';
+import { updatePlayers, updateResources, showBombExplosion } from './render.js';
 import { updateLobby, updateTimer, showGameEnded, showGameQuit, showPauseOverlay } from './ui.js';
+import { audioManager } from './audio.js';
 
 let socket = null;
 
@@ -55,6 +56,16 @@ export function connect() {
   socket.on('updateResources', (resources) => {
     setResources(resources);
     updateResources(resources);
+  });
+
+  // Специальное событие для воспроизведения звука сбора ресурса
+  socket.on('resourceCollected', () => {
+    audioManager.play('coin-pickup');
+  });
+
+  // Событие взрыва бомбы
+  socket.on('bombExplosion', (data) => {
+    showBombExplosion(data.x, data.y);
   });
 
   socket.on('updateTimer', (time) => {

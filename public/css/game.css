@@ -20,6 +20,165 @@
   border-radius: 0 !important; /* убираем круглую форму у игрока */
 }
 
+/* Эффект двойных очков для игрока */
+.cell.player.double-points {
+  box-shadow: 0 0 20px #FFE55C, 0 0 40px rgba(255, 229, 92, 0.7);
+  animation: playerDoublePoints 1s ease-in-out infinite alternate;
+}
+
+/* Эффект магнита для игрока */
+.cell.player.magnet-effect {
+  box-shadow: 0 0 20px #FF4444, 0 0 40px rgba(255, 68, 68, 0.7);
+  animation: playerMagnet 0.8s ease-in-out infinite;
+  position: relative;
+}
+
+/* Эффект заморозки для игрока */
+.cell.player.frozen-effect {
+  box-shadow: 0 0 20px #00BFFF, 0 0 40px rgba(0, 191, 255, 0.8), inset 0 0 15px rgba(0, 191, 255, 0.3);
+  animation: playerFrozen 1.2s ease-in-out infinite;
+  position: relative;
+  border-color: #87CEEB !important;
+}
+
+/* Создаем магнитные волны вокруг игрока */
+.cell.player.magnet-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255, 68, 68, 0.6);
+  border-radius: 50%;
+  animation: magnetWaves 1.5s ease-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.cell.player.magnet-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 68, 68, 0.4);
+  border-radius: 50%;
+  animation: magnetWaves 1.5s ease-out infinite 0.3s;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Создаем ледяные кристаллы вокруг замороженного игрока */
+.cell.player.frozen-effect::before {
+  content: '❄️';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 12px;
+  animation: iceCrystal 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cell.player.frozen-effect::after {
+  content: '❄️';
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  font-size: 10px;
+  animation: iceCrystal 2s ease-in-out infinite 1s;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@keyframes playerDoublePoints {
+  0% { 
+    box-shadow: 0 0 15px #FFE55C, 0 0 30px rgba(255, 229, 92, 0.6);
+    border-color: #FFD700;
+  }
+  100% { 
+    box-shadow: 0 0 25px #FFE55C, 0 0 50px rgba(255, 229, 92, 0.9);
+    border-color: #FFE55C;
+  }
+}
+
+@keyframes playerMagnet {
+  0% { 
+    box-shadow: 0 0 15px #FF4444, 0 0 30px rgba(255, 68, 68, 0.6);
+    border-color: #FF4444;
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 30px #FF4444, 0 0 60px rgba(255, 68, 68, 0.9);
+    border-color: #FF6666;
+    transform: scale(1.02);
+  }
+  100% { 
+    box-shadow: 0 0 15px #FF4444, 0 0 30px rgba(255, 68, 68, 0.6);
+    border-color: #FF4444;
+    transform: scale(1);
+  }
+}
+
+@keyframes magnetWaves {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+    border-width: 3px;
+  }
+  30% {
+    opacity: 0.8;
+    border-width: 2px;
+  }
+  70% {
+    opacity: 0.4;
+    border-width: 1px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+    border-width: 0px;
+  }
+}
+
+@keyframes playerFrozen {
+  0% { 
+    box-shadow: 0 0 15px #00BFFF, 0 0 30px rgba(0, 191, 255, 0.6), inset 0 0 10px rgba(0, 191, 255, 0.2);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 25px #00BFFF, 0 0 50px rgba(0, 191, 255, 0.9), inset 0 0 20px rgba(0, 191, 255, 0.4);
+    transform: scale(1.01);
+  }
+  100% { 
+    box-shadow: 0 0 15px #00BFFF, 0 0 30px rgba(0, 191, 255, 0.6), inset 0 0 10px rgba(0, 191, 255, 0.2);
+    transform: scale(1);
+  }
+}
+
+@keyframes iceCrystal {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: rotate(5deg) scale(1.1);
+    opacity: 1;
+  }
+  50% { 
+    transform: rotate(-5deg) scale(0.9);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: rotate(3deg) scale(1.05);
+    opacity: 1;
+  }
+}
+
 .cell.resource {
   /* Базовый цвет, который может быть переопределен через style.backgroundColor */
   background-color: #FFD700;
@@ -51,6 +210,29 @@
   box-shadow: 0 0 2px #B8621E, 0 0 12px rgba(184, 98, 30, 0.2);
 }
 
+.resource[title*="teleport"] {
+  box-shadow: 0 0 20px #9966FF, 0 0 40px rgba(153, 102, 255, 0.5);
+  animation: teleportSpin 1.5s linear infinite;
+}
+
+.resource[title*="doublePoints"] {
+  box-shadow: 0 0 25px #FFE55C, 0 0 50px rgba(255, 229, 92, 0.6), 0 0 75px rgba(255, 215, 0, 0.3);
+  animation: doublePointsGlow 1.2s ease-in-out infinite alternate;
+}
+
+.resource[title*="magnet"] {
+  box-shadow: 0 0 25px #FF4444, 0 0 50px rgba(255, 68, 68, 0.6), 0 0 75px rgba(255, 100, 100, 0.3);
+  animation: magnetPulse 1.2s ease-in-out infinite;
+}
+
+.resource.bomb-resource {
+  background-color: transparent !important; /* Убираем красный фон */
+  box-shadow: 0 0 15px #FF0000, 0 0 30px rgba(255, 0, 0, 0.6), 0 0 45px rgba(255, 50, 50, 0.3);
+  animation: bombPulse 0.6s ease-in-out infinite;
+  border: none; /* Убираем красную обводку */
+  border-radius: 50%;
+}
+
 @keyframes goldPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
@@ -59,4 +241,73 @@
 @keyframes silverPulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
+}
+
+@keyframes teleportSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.05); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  75% { transform: rotate(270deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes doublePointsGlow {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 25px #FFE55C, 0 0 50px rgba(255, 229, 92, 0.6), 0 0 75px rgba(255, 215, 0, 0.3);
+  }
+  100% { 
+    transform: scale(1.15);
+    box-shadow: 0 0 35px #FFE55C, 0 0 70px rgba(255, 229, 92, 0.8), 0 0 105px rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes magnetPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 15px #FF4444, 0 0 30px rgba(255, 68, 68, 0.6);
+  }
+  20% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #FF4444, 0 0 50px rgba(255, 68, 68, 0.8);
+  }
+  40% { 
+    transform: scale(0.95);
+    box-shadow: 0 0 20px #FF4444, 0 0 40px rgba(255, 68, 68, 0.7);
+  }
+  60% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #FF4444, 0 0 60px rgba(255, 68, 68, 0.9);
+  }
+  80% { 
+    transform: scale(0.98);
+    box-shadow: 0 0 18px #FF4444, 0 0 35px rgba(255, 68, 68, 0.6);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 15px #FF4444, 0 0 30px rgba(255, 68, 68, 0.6);
+  }
+}
+
+@keyframes bombPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  25% { 
+    transform: scale(1.15);
+    box-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8);
+  }
+  50% { 
+    transform: scale(1.3);
+    box-shadow: 0 0 30px #FF0000, 0 0 60px rgba(255, 0, 0, 1.0), 0 0 90px rgba(255, 100, 100, 0.4);
+  }
+  75% { 
+    transform: scale(1.15);
+    box-shadow: 0 0 20px #FF0000, 0 0 40px rgba(255, 0, 0, 0.8);
+  }
+  100% { 
+    transform: scale(1);
+    box-shadow: 0 0 10px #FF0000, 0 0 20px rgba(255, 0, 0, 0.5);
+  }
 }

@@ -9,6 +9,11 @@ function handleMove(socket, direction, io) {
   const player = state.getPlayer(playerId);
   
   if (!player) return;
+  
+  // Проверяем, не заморожен ли игрок
+  if (player.frozenUntil && Date.now() < player.frozenUntil) {
+    return; // Игрок заморожен и не может двигаться
+  }
 
   // Сохраняем старые координаты для проверки
   const oldX = player.x;
@@ -41,6 +46,8 @@ function handleMove(socket, direction, io) {
   // Отправляем ресурсы только если что-то собрали
   if (resourceCollected) {
     io.emit('updateResources', state.getResources());
+    // Отправляем специальное событие для звука сбора
+    socket.emit('resourceCollected');
   }
 }
 

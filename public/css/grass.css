@@ -97,19 +97,11 @@
   }
 }
 
-/* Улучшенные стили для клеток поля */
+/* Улучшенные стили для клеток поля на траве */
 .cell {
-  width: 30px;
-  height: 30px;
-  background: transparent;
-  border: none;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  line-height: 1;
-  position: relative;
+  background: transparent;      /* Прозрачный фон для отображения травы */
+  border: none;                /* Убираем границы для чистого вида */
+  position: relative;          /* Для позиционирования эффектов */
 }
 
 /* Игроки на травяном поле */

@@ -45,23 +45,48 @@
   position: fixed;
   top: 90px;
   left: 20px;
-  background: white;
-  border: 2px solid #dee2e6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Красивый фиолетово-синий градиент */
+  border: 2px solid rgba(255, 255, 255, 0.3);
   padding: 20px;
   border-radius: 12px;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 16px; /* Увеличили с 14px до 16px */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   text-align: left;
-  min-width: 250px;
-  color: #333;
+  min-width: 280px; /* Увеличили ширину */
+  color: white; /* Белый текст для контраста */
   z-index: 1000;
   transition: all 0.3s ease;
+  line-height: 1.6;
+  backdrop-filter: blur(10px); /* Размытие фона для стеклянного эффекта */
+}
+
+/* Стили для эффектов в scoreboard */
+#scoreboard .effect-icon {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 4px 8px; /* Увеличили padding */
+  border-radius: 12px;
+  font-size: 14px; /* Увеличили с 12px до 14px */
+  font-weight: bold;
+  animation: effectPulse 1.5s ease-in-out infinite alternate;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes effectPulse {
+  0% { 
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
 #scoreboard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  border-color: #007bff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 #scoreboard .scoreboard-header h3 {
@@ -176,7 +201,7 @@
 .help-card {
   background: white;
   border-radius: 15px;
-  width: min(90vw, 600px);
+  width: min(90vw, 700px);
   max-height: min(85vh, 700px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -404,6 +429,41 @@ kbd {
 .resource-icon.diamond {
   background: linear-gradient(45deg, #68dbfaff, #4FC3F7);
   box-shadow: 0 0 20px rgba(104, 219, 250, 0.6);
+}
+
+.resource-icon.special {
+  background: linear-gradient(45deg, #FFE55C, #FFD700);
+  box-shadow: 0 0 15px rgba(255, 229, 92, 0.6);
+}
+
+.resource-icon.magnet {
+  background: linear-gradient(45deg, #FF4444, #CC3333);
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+}
+
+.resource-icon.teleport {
+  background: linear-gradient(45deg, #9966FF, #7744DD);
+  box-shadow: 0 0 15px rgba(153, 102, 255, 0.6);
+}
+
+.resource-icon.bomb {
+  background: linear-gradient(45deg, #FF0000, #DD0000);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+.resource-icon.freeze {
+  background: linear-gradient(45deg, #00BFFF, #0099CC);
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
 }
 
 .resource-info {
