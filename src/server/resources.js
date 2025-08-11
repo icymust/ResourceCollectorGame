@@ -12,6 +12,7 @@ const RESOURCE_TYPES = [
   { type: 'confusionTrap', points: 0, rarity: 0.01, color: '#FF69B4', symbol: '😵', effect: 'confusion' }, // Ловушка путаницы
   { type: 'freezeTrap',   points: 0,  rarity: 0.008, color: '#00BFFF', symbol: '🧊', effect: 'freeze' }, // Редкая ловушка  
   { type: 'poisonTrap',   points: -2, rarity: 0.007, color: '#32CD32', symbol: '☣️', effect: 'poison' }, // Ядовитая ловушка
+  { type: 'ghostMode',    points: 2,  rarity: 0.05, color: '#9966CC', symbol: '👻', effect: 'ghostMode' }, // Призрачный режим - для тестирования 5%
   { type: 'diamond',      points: 10, rarity: 0.005, color: '#68dbfaff', symbol: '💎' }, // Джекпот
 ];
 
@@ -237,6 +238,11 @@ function applyResourceEffect(player, effectType) {
       // Отравляем игрока на 6 секунд (-1 очко каждые 2 секунды)
       player.poisonedUntil = Date.now() + 6000; // 6 секунд
       player.lastPoisonDamage = Date.now(); // Время последнего урона от яда
+      break;
+      
+    case 'ghostMode':
+      // Активируем призрачный режим на 10 секунд - другие игроки становятся невидимыми
+      player.ghostModeUntil = Date.now() + 10000; // 10 секунд
       break;
       
     // Здесь можно добавить другие эффекты в будущем

@@ -46,7 +46,8 @@ function startEffectUpdates() {
       (player.magnetUntil && Date.now() < player.magnetUntil) ||
       (player.frozenUntil && Date.now() < player.frozenUntil) ||
       (player.confusedUntil && Date.now() < player.confusedUntil) ||
-      (player.poisonedUntil && Date.now() < player.poisonedUntil)
+      (player.poisonedUntil && Date.now() < player.poisonedUntil) ||
+      (player.ghostModeUntil && Date.now() < player.ghostModeUntil)
     );
     
     // Если есть активные эффекты, обновляем отображение
@@ -136,6 +137,19 @@ function getPlayerEffects(player) {
     });
   }
   
+  if (player.ghostModeUntil && now < player.ghostModeUntil) {
+    const remaining = Math.ceil((player.ghostModeUntil - now) / 1000);
+    effects.push({
+      class: 'ghost-mode-effect',
+      icon: '👻',
+      text: 'GHOST',
+      tooltip: `Ghost Mode for ${remaining}s (Other players invisible)`,
+      color: 'white',
+      background: 'linear-gradient(45deg, #9966CC, #6633AA)',
+      border: '#9966CC'
+    });
+  }
+  
   return effects;
 }
 
@@ -152,6 +166,7 @@ function renderFrame() {
         oldCell.classList.remove("frozen-effect"); // Убираем эффект заморозки
         oldCell.classList.remove("confused-effect"); // Убираем эффект путаницы
         oldCell.classList.remove("poisoned-effect"); // Убираем эффект отравления
+        oldCell.classList.remove("ghost-mode-effect"); // Убираем эффект призрачного режима
         // Не очищаем backgroundColor, если на этой клетке есть ресурс
         if (!oldCell.classList.contains("resource")) {
           oldCell.style.backgroundColor = "";
@@ -166,6 +181,22 @@ function renderFrame() {
       const idx = p.y * GRID.COLS + p.x;
       const cell = board.children[idx];
       if (cell) {
+        // Проверяем Ghost Mode - если кто-то другой активировал Ghost Mode, то я не вижу СЕБЯ
+        const playersWithGhostMode = Object.values(pending.players).filter(player => 
+          player.id !== state.myId && // не я
+          player.ghostModeUntil && 
+          Date.now() < player.ghostModeUntil
+        );
+        
+        const shouldHideMyself = playersWithGhostMode.length > 0 && p.id === state.myId;
+        
+        // Если другой игрок активировал Ghost Mode и это мой персонаж - скрываем меня
+        if (shouldHideMyself) {
+          // Не добавляем класс player и не показываем своего игрока
+          prevPlayerIndex.set(p.id, idx);
+          return;
+        }
+        
         cell.classList.add("player");
         
         // Проверяем активные эффекты
@@ -175,8 +206,7 @@ function renderFrame() {
         const isFrozen = effects.some(effect => effect.class === 'frozen-effect');
         const isConfused = effects.some(effect => effect.class === 'confused-effect');
         const isPoisoned = effects.some(effect => effect.class === 'poisoned-effect');
-        
-        if (hasDoublePoints) {
+        const hasGhostMode = effects.some(effect => effect.class === 'ghost-mode-effect');        if (hasDoublePoints) {
           cell.classList.add("double-points");
         } else {
           cell.classList.remove("double-points");
@@ -206,6 +236,12 @@ function renderFrame() {
           cell.classList.remove("poisoned-effect");
         }
         
+        if (hasGhostMode) {
+          cell.classList.add("ghost-mode-effect");
+        } else {
+          cell.classList.remove("ghost-mode-effect");
+        }
+        
         cell.style.backgroundColor = p.color;
         // Если на клетке есть ресурс, показываем информацию и об игроке, и о ресурсе
         if (cell.classList.contains("resource")) {
@@ -215,6 +251,7 @@ function renderFrame() {
           if (isFrozen) effectTexts.push("заморожен");
           if (isConfused) effectTexts.push("запутан");
           if (isPoisoned) effectTexts.push("отравлен");
+          if (hasGhostMode) effectTexts.push("призрачный режим");
           const effectText = effectTexts.length ? ` [${effectTexts.join(', ')}!]` : "";
           cell.title = `${p.name}${effectText} (на ресурсе: ${cell.title.split(' (+')[0]})`;
         } else {
@@ -224,6 +261,7 @@ function renderFrame() {
           if (isFrozen) effectTexts.push("заморожен");
           if (isConfused) effectTexts.push("запутан");
           if (isPoisoned) effectTexts.push("отравлен");
+          if (hasGhostMode) effectTexts.push("призрачный режим");
           const effectText = effectTexts.length ? ` [${effectTexts.join(', ')}!]` : "";
           cell.title = p.name + effectText;
         }
