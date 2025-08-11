@@ -42,6 +42,43 @@ function handleKeyDown(e) {
 
   if (direction) {
     e.preventDefault(); // не скроллим страницу
+    
+    // Проверяем, есть ли эффект confusion у текущего игрока
+    const currentPlayer = state.players && state.players[state.myId];
+    
+    // Отладочная информация о состоянии игрока
+    if (currentPlayer) {
+      console.log(`Player state:`, {
+        id: state.myId,
+        confusedUntil: currentPlayer.confusedUntil,
+        now: Date.now(),
+        isConfused: currentPlayer.confusedUntil && Date.now() < currentPlayer.confusedUntil
+      });
+    } else {
+      console.log('❌ Current player not found in state.players', { myId: state.myId, players: state.players });
+    }
+    
+    const isConfused = currentPlayer && 
+      currentPlayer.confusedUntil && 
+      Date.now() < currentPlayer.confusedUntil;
+    
+    // Отладочная информация
+    if (isConfused) {
+      console.log(`🔄 CONFUSION ACTIVE! Original: ${direction}`);
+    }
+    
+    // Если игрок запутан, реверсируем управление
+    if (isConfused) {
+      const originalDirection = direction;
+      switch (direction) {
+        case 'left': direction = 'right'; break;
+        case 'right': direction = 'left'; break;
+        case 'up': direction = 'down'; break;
+        case 'down': direction = 'up'; break;
+      }
+      console.log(`🔄 Direction reversed: ${originalDirection} → ${direction}`);
+    }
+    
     emitMove(direction);
   }
 }

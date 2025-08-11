@@ -44,7 +44,9 @@ function startEffectUpdates() {
     const hasActiveEffects = Object.values(players).some(player => 
       (player.doublePointsUntil && Date.now() < player.doublePointsUntil) ||
       (player.magnetUntil && Date.now() < player.magnetUntil) ||
-      (player.frozenUntil && Date.now() < player.frozenUntil)
+      (player.frozenUntil && Date.now() < player.frozenUntil) ||
+      (player.confusedUntil && Date.now() < player.confusedUntil) ||
+      (player.poisonedUntil && Date.now() < player.poisonedUntil)
     );
     
     // Если есть активные эффекты, обновляем отображение
@@ -69,48 +71,70 @@ function getPlayerEffects(player) {
   const effects = [];
   const now = Date.now();
   
-  // Проверяем эффект двойных очков
   if (player.doublePointsUntil && now < player.doublePointsUntil) {
-    const timeLeft = Math.ceil((player.doublePointsUntil - now) / 1000);
+    const remaining = Math.ceil((player.doublePointsUntil - now) / 1000);
     effects.push({
+      class: 'double-points',
       icon: '✨',
-      text: `2x ${timeLeft}s`,
-      color: '#FFE55C',
-      background: 'rgba(255,229,92,0.2)',
-      border: '#FFE55C',
-      tooltip: `Двойные очки (${timeLeft} сек)`
+      text: '2x',
+      tooltip: `Double points for ${remaining}s`,
+      color: '#333',
+      background: 'linear-gradient(45deg, #FFE55C, #FFD700)',
+      border: '#FFD700'
     });
   }
   
-  // Проверяем эффект магнита
   if (player.magnetUntil && now < player.magnetUntil) {
-    const timeLeft = Math.ceil((player.magnetUntil - now) / 1000);
+    const remaining = Math.ceil((player.magnetUntil - now) / 1000);
     effects.push({
+      class: 'magnet-effect',
       icon: '🧲',
-      text: `${timeLeft}s`,
-      color: '#FF4444',
-      background: 'rgba(255,68,68,0.2)',
-      border: '#FF4444',
-      tooltip: `Магнит (${timeLeft} сек)`
+      text: 'MAG',
+      tooltip: `Magnet effect for ${remaining}s`,
+      color: 'white',
+      background: 'linear-gradient(45deg, #FF4444, #CC3333)',
+      border: '#FF4444'
     });
   }
   
-  // Проверяем эффект заморозки
   if (player.frozenUntil && now < player.frozenUntil) {
-    const timeLeft = Math.ceil((player.frozenUntil - now) / 1000);
+    const remaining = Math.ceil((player.frozenUntil - now) / 1000);
     effects.push({
+      class: 'frozen-effect',
       icon: '🧊',
-      text: `${timeLeft}s`,
-      color: '#00BFFF',
-      background: 'rgba(0,191,255,0.3)',
-      border: '#00BFFF',
-      tooltip: `Заморожен (${timeLeft} сек)`
+      text: 'FRZ',
+      tooltip: `Frozen for ${remaining}s`,
+      color: 'white',
+      background: 'linear-gradient(45deg, #00BFFF, #0099CC)',
+      border: '#00BFFF'
     });
   }
   
-  // Здесь можно добавить другие эффекты в будущем
-  // if (player.shieldUntil && now < player.shieldUntil) { ... }
-  // if (player.speedUntil && now < player.speedUntil) { ... }
+  if (player.confusedUntil && now < player.confusedUntil) {
+    const remaining = Math.ceil((player.confusedUntil - now) / 1000);
+    effects.push({
+      class: 'confused-effect',
+      icon: '😵',
+      text: 'CNF',
+      tooltip: `Confused controls for ${remaining}s`,
+      color: 'white',
+      background: 'linear-gradient(45deg, #FF69B4, #CC1493)',
+      border: '#FF69B4'
+    });
+  }
+  
+  if (player.poisonedUntil && now < player.poisonedUntil) {
+    const remaining = Math.ceil((player.poisonedUntil - now) / 1000);
+    effects.push({
+      class: 'poisoned-effect',
+      icon: '☣️',
+      text: 'PSN',
+      tooltip: `Poisoned for ${remaining}s (-1 HP/2s)`,
+      color: 'white',
+      background: 'linear-gradient(45deg, #32CD32, #228B22)',
+      border: '#32CD32'
+    });
+  }
   
   return effects;
 }
@@ -126,6 +150,8 @@ function renderFrame() {
         oldCell.classList.remove("double-points"); // Убираем эффект двойных очков
         oldCell.classList.remove("magnet-effect"); // Убираем эффект магнита
         oldCell.classList.remove("frozen-effect"); // Убираем эффект заморозки
+        oldCell.classList.remove("confused-effect"); // Убираем эффект путаницы
+        oldCell.classList.remove("poisoned-effect"); // Убираем эффект отравления
         // Не очищаем backgroundColor, если на этой клетке есть ресурс
         if (!oldCell.classList.contains("resource")) {
           oldCell.style.backgroundColor = "";
@@ -144,9 +170,11 @@ function renderFrame() {
         
         // Проверяем активные эффекты
         const effects = getPlayerEffects(p);
-        const hasDoublePoints = effects.some(effect => effect.icon === '✨');
-        const hasMagnet = effects.some(effect => effect.icon === '🧲');
-        const isFrozen = effects.some(effect => effect.icon === '🧊');
+        const hasDoublePoints = effects.some(effect => effect.class === 'double-points');
+        const hasMagnet = effects.some(effect => effect.class === 'magnet-effect');
+        const isFrozen = effects.some(effect => effect.class === 'frozen-effect');
+        const isConfused = effects.some(effect => effect.class === 'confused-effect');
+        const isPoisoned = effects.some(effect => effect.class === 'poisoned-effect');
         
         if (hasDoublePoints) {
           cell.classList.add("double-points");
@@ -166,6 +194,18 @@ function renderFrame() {
           cell.classList.remove("frozen-effect");
         }
         
+        if (isConfused) {
+          cell.classList.add("confused-effect");
+        } else {
+          cell.classList.remove("confused-effect");
+        }
+        
+        if (isPoisoned) {
+          cell.classList.add("poisoned-effect");
+        } else {
+          cell.classList.remove("poisoned-effect");
+        }
+        
         cell.style.backgroundColor = p.color;
         // Если на клетке есть ресурс, показываем информацию и об игроке, и о ресурсе
         if (cell.classList.contains("resource")) {
@@ -173,6 +213,8 @@ function renderFrame() {
           if (hasDoublePoints) effectTexts.push("2x очков");
           if (hasMagnet) effectTexts.push("магнит");
           if (isFrozen) effectTexts.push("заморожен");
+          if (isConfused) effectTexts.push("запутан");
+          if (isPoisoned) effectTexts.push("отравлен");
           const effectText = effectTexts.length ? ` [${effectTexts.join(', ')}!]` : "";
           cell.title = `${p.name}${effectText} (на ресурсе: ${cell.title.split(' (+')[0]})`;
         } else {
@@ -180,6 +222,8 @@ function renderFrame() {
           if (hasDoublePoints) effectTexts.push("2x очков");
           if (hasMagnet) effectTexts.push("магнит");
           if (isFrozen) effectTexts.push("заморожен");
+          if (isConfused) effectTexts.push("запутан");
+          if (isPoisoned) effectTexts.push("отравлен");
           const effectText = effectTexts.length ? ` [${effectTexts.join(', ')}!]` : "";
           cell.title = p.name + effectText;
         }
@@ -278,6 +322,20 @@ function renderFrame() {
             // cell.style.boxShadow = "0 0 10px rgba(0, 191, 255, 0.5)"; // Ледяное свечение
             // cell.textContent = resource.symbol || "🧊"; // Символ льда
             // cell.title = `❄️ Freeze Trap (замораживает на 4 секунды!)`; // Подсказка
+            cell.textContent = ""; // Убираем любой символ
+            cell.title = ""; // Убираем подсказку
+            cell.style.backgroundColor = "transparent"; // Прозрачный фон
+            cell.style.border = "none"; // Без границ
+            cell.style.boxShadow = "none"; // Без свечения
+          } else if (resource.type === 'poisonTrap') {
+            // Делаем ядовитую ловушку невидимой
+            cell.textContent = ""; // Убираем любой символ
+            cell.title = ""; // Убираем подсказку
+            cell.style.backgroundColor = "transparent"; // Прозрачный фон
+            cell.style.border = "none"; // Без границ
+            cell.style.boxShadow = "none"; // Без свечения
+          } else if (resource.type === 'confusionTrap') {
+            // Делаем ловушку путаницы невидимой
             cell.textContent = ""; // Убираем любой символ
             cell.title = ""; // Убираем подсказку
             cell.style.backgroundColor = "transparent"; // Прозрачный фон

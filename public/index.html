@@ -190,6 +190,13 @@
                 <span>Random position</span>
               </div>
             </div>
+            <div class="resource-item" data-rarity="Drop chance: 3% (Trap)">
+              <div class="resource-icon confusion">😵</div>
+              <div class="resource-info">
+                <strong>Confusion Trap</strong>
+                <span>Reverses controls for 6 sec</span>
+              </div>
+            </div>
             <div class="resource-item" data-rarity="Drop chance: 2.5% (Danger)">
               <div class="resource-icon bomb">💣</div>
               <div class="resource-info">
@@ -204,7 +211,14 @@
                 <span>Immobilizes for 4 sec</span>
               </div>
             </div>
-            <div class="resource-item" data-rarity="Drop chance: 1% (Ultra Rare)">
+            <div class="resource-item" data-rarity="Drop chance: 0.7% (Poison)">
+              <div class="resource-icon poison">☣️</div>
+              <div class="resource-info">
+                <strong>Poison Trap</strong>
+                <span>-2 points + DOT damage</span>
+              </div>
+            </div>
+            <div class="resource-item" data-rarity="Drop chance: 0.5% (Ultra Rare)">
               <div class="resource-icon diamond">💎</div>
               <div class="resource-info">
                 <strong>Diamond</strong>
@@ -273,6 +287,41 @@
                 </ul>
               </div>
             </div>
+            
+            <div class="danger-item confusion-danger">
+              <div class="danger-icon">😵</div>
+              <div class="danger-info">
+                <h5>Confusion Trap</h5>
+                <p><strong>Visible:</strong> No, completely invisible stealth trap</p>
+                <p><strong>Duration:</strong> Reverses controls for 6 seconds</p>
+                <p><strong>Effect Radius:</strong> Single tile (only affects the player who steps on it)</p>
+                <p><strong>Effects:</strong></p>
+                <ul>
+                  <li>🔄 <strong>Control Reversal:</strong> ↑ becomes ↓, ← becomes →, etc.</li>
+                  <li>⭐ <strong>Visual Effect:</strong> Spinning stars and pink border around player</li>
+                  <li>🎮 <strong>No Damage:</strong> Only confuses movement, no point loss</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="danger-item poison-danger">
+              <div class="danger-icon">☣️</div>
+              <div class="danger-info">
+                <h5>Poison Trap</h5>
+                <p><strong>Visible:</strong> No, completely invisible stealth trap</p>
+                <p><strong>Initial Damage:</strong> -2 points immediately upon contact</p>
+                <p><strong>Duration:</strong> 6 seconds of continuous poison damage</p>
+                <p><strong>Damage Over Time:</strong> -1 point every 2 seconds (3 ticks total)</p>
+                <p><strong>Total Damage:</strong> Up to -5 points maximum</p>
+                <p><strong>Effects:</strong></p>
+                <ul>
+                  <li>☠️ <strong>Instant Damage:</strong> -2 points when first stepped on</li>
+                  <li>🧪 <strong>Poison DOT:</strong> -1 HP every 2 seconds for 6 seconds</li>
+                  <li>💚 <strong>Visual Effect:</strong> Green toxic cloud and poison bubbles around player</li>
+                  <li>⚠️ <strong>Most Dangerous:</strong> Highest total damage of all traps</li>
+                </ul>
+              </div>
+            </div>
           </div>
           
           <div class="radius-explanation">
@@ -288,6 +337,42 @@
                   <div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell"></div>
                   <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell"></div><div class="grid-cell"></div>
                 </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="strategy-section">
+            <h4>🧠 Strategic Survival Tips</h4>
+            
+            <div class="strategy-tips">
+              <div class="tip-category">
+                <h5>🛡️ Defensive Strategies</h5>
+                <ul>
+                  <li><strong>📱 Use Teleport wisely:</strong> Save for emergencies or escaping multiple dangers</li>
+                  <li><strong>🧲 Magnet for safety:</strong> Collect resources without moving into danger zones</li>
+                  <li><strong>👀 Watch for patterns:</strong> Invisible traps create consistent danger zones</li>
+                  <li><strong>⏰ Time management:</strong> Wait for effects to wear off before moving</li>
+                </ul>
+              </div>
+              
+              <div class="tip-category">
+                <h5>⚡ Trap-Specific Tactics</h5>
+                <ul>
+                  <li><strong>🧊 Against Freeze:</strong> Use Teleport or wait - movement is impossible</li>
+                  <li><strong>😵 Against Confusion:</strong> Move slowly, think reversed (↑=↓, ←=→)</li>
+                  <li><strong>☣️ Against Poison:</strong> Move IMMEDIATELY after contact to minimize DOT</li>
+                  <li><strong>💣 Avoid Bombs:</strong> Check 3-tile radius before moving near explosions</li>
+                </ul>
+              </div>
+              
+              <div class="tip-category">
+                <h5>🏆 Advanced Techniques</h5>
+                <ul>
+                  <li><strong>📍 Memory mapping:</strong> Remember where invisible traps activated</li>
+                  <li><strong>⚡ Speed vs Safety:</strong> Sometimes slow movement prevents trap activation</li>
+                  <li><strong>🎯 Resource priority:</strong> Gold/Diamond worth more risk than Bronze</li>
+                  <li><strong>🔄 Effect stacking:</strong> Multiple effects can compound - be extra careful</li>
+                </ul>
               </div>
             </div>
           </div>

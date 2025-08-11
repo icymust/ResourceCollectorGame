@@ -41,6 +41,22 @@
   border-color: #87CEEB !important;
 }
 
+/* Эффект отравления для игрока */
+.cell.player.poisoned-effect {
+  box-shadow: 0 0 20px #32CD32, 0 0 40px rgba(50, 205, 50, 0.8), inset 0 0 15px rgba(50, 205, 50, 0.3);
+  animation: playerPoisoned 1.5s ease-in-out infinite;
+  position: relative;
+  border-color: #228B22 !important;
+}
+
+/* Эффект путаницы для игрока */
+.cell.player.confused-effect {
+  box-shadow: 0 0 20px #FF69B4, 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 15px rgba(255, 105, 180, 0.3);
+  animation: playerConfused 1.3s ease-in-out infinite;
+  position: relative;
+  border-color: #FF1493 !important;
+}
+
 /* Создаем магнитные волны вокруг игрока */
 .cell.player.magnet-effect::before {
   content: '';
@@ -91,6 +107,52 @@
   right: -5px;
   font-size: 10px;
   animation: iceCrystal 2s ease-in-out infinite 1s;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Создаем ядовитые пузыри вокруг отравленного игрока */
+.cell.player.poisoned-effect::before {
+  content: '☠️';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  font-size: 14px;
+  animation: poisonBubble 1.8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cell.player.poisoned-effect::after {
+  content: '💀';
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  font-size: 12px;
+  animation: poisonBubble 1.8s ease-in-out infinite 0.9s;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Создаем вращающиеся звездочки вокруг запутанного игрока */
+.cell.player.confused-effect::before {
+  content: '⭐';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  font-size: 16px;
+  animation: confusionSpin 2s linear infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.cell.player.confused-effect::after {
+  content: '✨';
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  font-size: 14px;
+  animation: confusionSpin 2s linear infinite reverse;
   pointer-events: none;
   z-index: 3;
 }
@@ -175,6 +237,98 @@
   }
   75% { 
     transform: rotate(3deg) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes playerPoisoned {
+  0% { 
+    box-shadow: 0 0 15px #32CD32, 0 0 30px rgba(50, 205, 50, 0.6), inset 0 0 10px rgba(50, 205, 50, 0.3);
+    transform: scale(1.0);
+  }
+  25% {
+    box-shadow: 0 0 25px #228B22, 0 0 50px rgba(34, 139, 34, 0.9), inset 0 0 20px rgba(34, 139, 34, 0.5);
+    transform: scale(1.03);
+  }
+  50% { 
+    box-shadow: 0 0 20px #32CD32, 0 0 40px rgba(50, 205, 50, 0.8), inset 0 0 15px rgba(50, 205, 50, 0.4);
+    transform: scale(1.02);
+  }
+  75% {
+    box-shadow: 0 0 25px #008000, 0 0 50px rgba(0, 128, 0, 1), inset 0 0 20px rgba(0, 128, 0, 0.6);
+    transform: scale(1.03);
+  }
+  100% { 
+    box-shadow: 0 0 15px #32CD32, 0 0 30px rgba(50, 205, 50, 0.6), inset 0 0 10px rgba(50, 205, 50, 0.3);
+    transform: scale(1.0);
+  }
+}
+
+@keyframes playerConfused {
+  0% { 
+    box-shadow: 0 0 15px #FF69B4, 0 0 30px rgba(255, 105, 180, 0.6), inset 0 0 10px rgba(255, 105, 180, 0.3);
+    transform: scale(1.0) rotate(0deg);
+  }
+  25% {
+    box-shadow: 0 0 25px #FF1493, 0 0 50px rgba(255, 20, 147, 0.9), inset 0 0 20px rgba(255, 20, 147, 0.5);
+    transform: scale(1.02) rotate(2deg);
+  }
+  50% { 
+    box-shadow: 0 0 20px #FF69B4, 0 0 40px rgba(255, 105, 180, 0.8), inset 0 0 15px rgba(255, 105, 180, 0.4);
+    transform: scale(1.01) rotate(-1deg);
+  }
+  75% {
+    box-shadow: 0 0 25px #CC1493, 0 0 50px rgba(204, 20, 147, 1), inset 0 0 20px rgba(204, 20, 147, 0.6);
+    transform: scale(1.03) rotate(1deg);
+  }
+  100% { 
+    box-shadow: 0 0 15px #FF69B4, 0 0 30px rgba(255, 105, 180, 0.6), inset 0 0 10px rgba(255, 105, 180, 0.3);
+    transform: scale(1.0) rotate(0deg);
+  }
+}
+
+@keyframes confusionSpin {
+  0% { 
+    transform: rotate(0deg) scale(1);
+    opacity: 0.8;
+  }
+  25% { 
+    transform: rotate(90deg) scale(1.2);
+    opacity: 1;
+  }
+  50% { 
+    transform: rotate(180deg) scale(0.9);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.1);
+    opacity: 1;
+  }
+  100% { 
+    transform: rotate(360deg) scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes poisonBubble {
+  0%, 100% { 
+    transform: rotate(-3deg) scale(1);
+    opacity: 0.7;
+  }
+  20% { 
+    transform: rotate(2deg) scale(1.2);
+    opacity: 1;
+  }
+  40% { 
+    transform: rotate(-5deg) scale(0.8);
+    opacity: 0.8;
+  }
+  60% { 
+    transform: rotate(4deg) scale(1.1);
+    opacity: 0.9;
+  }
+  80% { 
+    transform: rotate(-2deg) scale(1.05);
     opacity: 1;
   }
 }

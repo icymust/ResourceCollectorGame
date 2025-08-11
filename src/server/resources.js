@@ -2,21 +2,24 @@ const state = require('./state');
 
 // Типы ресурсов
 const RESOURCE_TYPES = [
-  { type: 'bronze',       points: 1,  rarity: 0.40, color: '#B8621E', symbol: '🪙' }, // Основной ресурс
+  { type: 'bronze',       points: 1,  rarity: 0.35, color: '#B8621E', symbol: '🪙' }, // Основной ресурс
   { type: 'silver',       points: 2,  rarity: 0.25, color: '#C0C0C0', symbol: '💵' }, // Частый
   { type: 'gold',         points: 3,  rarity: 0.15, color: '#FFD700', symbol: '💰' }, // Хороший
-  { type: 'doublePoints', points: 0,  rarity: 0.08, color: '#FFE55C', symbol: '✨', effect: 'doublePoints' }, // Полезный баф
-  { type: 'magnet',       points: 0,  rarity: 0.05, color: '#FF4444', symbol: '🧲', effect: 'magnet' }, // Редкий баф
-  { type: 'teleport',     points: 0,  rarity: 0.03, color: '#9966FF', symbol: '🌀', effect: 'teleport' }, // Эскейп
+  { type: 'doublePoints', points: 0,  rarity: 0.10, color: '#FFE55C', symbol: '✨', effect: 'doublePoints' }, // Полезный баф
+  { type: 'magnet',       points: 0,  rarity: 0.06, color: '#FF4444', symbol: '🧲', effect: 'magnet' }, // Редкий баф
+  { type: 'teleport',     points: 0,  rarity: 0.04, color: '#9966FF', symbol: '🌀', effect: 'teleport' }, // Эскейп
   { type: 'timeBomb',     points: 4,  rarity: 0.025, color: '#FF0000', symbol: '💣', effect: 'timeBomb' }, // Риск/награда
-  { type: 'freezeTrap',   points: 0,  rarity: 0.015, color: '#00BFFF', symbol: '🧊', effect: 'freeze' }, // Редкая ловушка  
-  { type: 'diamond',      points: 10, rarity: 0.01, color: '#68dbfaff', symbol: '💎' }, // Джекпот
+  { type: 'confusionTrap', points: 0, rarity: 0.01, color: '#FF69B4', symbol: '😵', effect: 'confusion' }, // Ловушка путаницы
+  { type: 'freezeTrap',   points: 0,  rarity: 0.008, color: '#00BFFF', symbol: '🧊', effect: 'freeze' }, // Редкая ловушка  
+  { type: 'poisonTrap',   points: -2, rarity: 0.007, color: '#32CD32', symbol: '☣️', effect: 'poison' }, // Ядовитая ловушка
+  { type: 'diamond',      points: 10, rarity: 0.005, color: '#68dbfaff', symbol: '💎' }, // Джекпот
 ];
 
 let spawnIntervalId = null;
 let cleanupIntervalId = null;
 let magnetIntervalId = null; // Интервал для обработки магнитного эффекта
 let bombIntervalId = null; // Интервал для обработки бомб
+let poisonIntervalId = null; // Интервал для обработки яда
 
 function pickResourceTypeWeighted() {
   const r = Math.random();
@@ -86,6 +89,8 @@ function startSpawning(io) {
   magnetIntervalId = setInterval(() => processMagnetEffects(io), 500);
   // Запускаем обработку бомб каждые 100мс для точности
   bombIntervalId = setInterval(() => processBombEffects(io), 100);
+  // Запускаем обработку яда каждые 2 секунды
+  poisonIntervalId = setInterval(() => processPoisonEffects(io), 2000);
 }
 
 function stopSpawning() {
@@ -104,6 +109,10 @@ function stopSpawning() {
   if (bombIntervalId) {
     clearInterval(bombIntervalId);
     bombIntervalId = null;
+  }
+  if (poisonIntervalId) {
+    clearInterval(poisonIntervalId);
+    poisonIntervalId = null;
   }
 }
 
@@ -217,6 +226,17 @@ function applyResourceEffect(player, effectType) {
     case 'freeze':
       // Замораживаем игрока на 4 секунды
       player.frozenUntil = Date.now() + 4000; // 4 секунды
+      break;
+      
+    case 'confusion':
+      // Путаем управление игрока на 6 секунд
+      player.confusedUntil = Date.now() + 6000; // 6 секунд
+      break;
+      
+    case 'poison':
+      // Отравляем игрока на 6 секунд (-1 очко каждые 2 секунды)
+      player.poisonedUntil = Date.now() + 6000; // 6 секунд
+      player.lastPoisonDamage = Date.now(); // Время последнего урона от яда
       break;
       
     // Здесь можно добавить другие эффекты в будущем
@@ -360,6 +380,33 @@ function processBombEffects(io) {
   }
 }
 
+// Функция обработки ядовитых эффектов (вызывается каждые 2 секунды)
+function processPoisonEffects(io) {
+  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
+  
+  const players = state.getPlayers();
+  let playersChanged = false;
+  const currentTime = Date.now();
+  
+  // Проходим по всем игрокам с активным эффектом яда
+  Object.values(players).forEach(player => {
+    if (player.poisonedUntil && currentTime < player.poisonedUntil) {
+      // Проверяем, прошло ли 2 секунды с последнего урона
+      if (currentTime - (player.lastPoisonDamage || 0) >= 2000) {
+        // Наносим урон от яда (-1 очко)
+        player.score = Math.max(0, player.score - 1);
+        player.lastPoisonDamage = currentTime;
+        playersChanged = true;
+      }
+    }
+  });
+  
+  // Если что-то изменилось, отправляем обновления
+  if (playersChanged) {
+    io.emit('updatePlayers', state.getPlayers());
+  }
+}
+
 module.exports = {
   RESOURCE_TYPES,
   spawnResource,
@@ -368,5 +415,6 @@ module.exports = {
   collectResource,
   pickResourceTypeWeighted,
   processMagnetEffects,
-  processBombEffects
+  processBombEffects,
+  processPoisonEffects
 };

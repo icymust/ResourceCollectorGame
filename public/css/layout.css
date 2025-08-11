@@ -457,12 +457,28 @@ kbd {
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
 }
 
+.resource-icon.confusion {
+  background: linear-gradient(45deg, #FF69B4, #CC1493);
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+}
+
 @keyframes pulse {
   from {
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
   }
   to {
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
+}
+
+@keyframes poisonPulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+    border-left-color: #28a745;
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(40, 167, 69, 0.5);
+    border-left-color: #34ce57;
   }
 }
 
@@ -489,6 +505,17 @@ kbd {
   box-shadow: 0 2px 8px rgba(13, 202, 240, 0.1);
 }
 
+.danger-item.confusion-danger {
+  border-left-color: #FF69B4;
+  box-shadow: 0 2px 8px rgba(255, 105, 180, 0.1);
+}
+
+.danger-item.poison-danger {
+  border-left-color: #28a745;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+  animation: poisonPulse 3s ease-in-out infinite alternate;
+}
+
 .danger-icon {
   width: 50px;
   height: 50px;
@@ -511,6 +538,17 @@ kbd {
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
 }
 
+.confusion-danger .danger-icon {
+  background: linear-gradient(45deg, #FF69B4, #CC1493);
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+}
+
+.poison-danger .danger-icon {
+  background: linear-gradient(45deg, #28a745, #1e7e34);
+  box-shadow: 0 0 15px rgba(40, 167, 69, 0.4);
+  animation: poisonPulse 3s ease-in-out infinite alternate;
+}
+
 .danger-info h5 {
   margin: 0 0 8px 0;
   color: #dc3545;
@@ -520,6 +558,82 @@ kbd {
 
 .freeze-danger .danger-info h5 {
   color: #0dcaf0;
+}
+
+.confusion-danger .danger-info h5 {
+  color: #FF69B4;
+}
+
+.poison-danger .danger-info h5 {
+  color: #28a745;
+}
+
+/* ===== СТИЛИ ДЛЯ СТРАТЕГИЧЕСКИХ СОВЕТОВ ===== */
+.strategy-section {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.05), rgba(40, 167, 69, 0.05));
+  border: 2px solid rgba(0, 123, 255, 0.2);
+  border-radius: 12px;
+}
+
+.strategy-section h4 {
+  color: #0d6efd;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.strategy-tips {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.tip-category {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.tip-category:nth-child(1) {
+  border-left-color: #0d6efd;
+}
+
+.tip-category:nth-child(2) {
+  border-left-color: #dc3545;
+}
+
+.tip-category:nth-child(3) {
+  border-left-color: #28a745;
+}
+
+.tip-category h5 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.tip-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tip-category li {
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.tip-category li::before {
+  content: "💡";
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .danger-info p {
