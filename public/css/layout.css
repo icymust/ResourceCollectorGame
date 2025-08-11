@@ -466,6 +466,142 @@ kbd {
   }
 }
 
+/* ===== СТИЛИ ДЛЯ ЛОВУШЕК И ОПАСНОСТЕЙ ===== */
+.danger-zones-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.danger-item {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #dc3545;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.1);
+}
+
+.danger-item.freeze-danger {
+  border-left-color: #0dcaf0;
+  box-shadow: 0 2px 8px rgba(13, 202, 240, 0.1);
+}
+
+.danger-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.bomb-danger .danger-icon {
+  background: linear-gradient(45deg, #ff0000, #cc0000);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+.freeze-danger .danger-icon {
+  background: linear-gradient(45deg, #00bfff, #0099cc);
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.4);
+}
+
+.danger-info h5 {
+  margin: 0 0 8px 0;
+  color: #dc3545;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.freeze-danger .danger-info h5 {
+  color: #0dcaf0;
+}
+
+.danger-info p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.danger-info ul {
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+
+.danger-info li {
+  margin: 3px 0;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.radius-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e7f3ff;
+  border-radius: 10px;
+  border: 1px solid #b8daff;
+}
+
+.radius-explanation h5 {
+  margin: 0 0 10px 0;
+  color: #0056b3;
+}
+
+.radius-explanation p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.radius-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 25px);
+  grid-template-rows: repeat(5, 25px);
+  gap: 2px;
+  margin: 10px 0;
+  justify-content: center;
+}
+
+.grid-cell {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.grid-cell.center {
+  background: #ff0000;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+}
+
+.grid-cell.affected {
+  background: #ffcccb;
+  border-color: #ff6b6b;
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.radius-example {
+  margin: 10px 0;
+}
+
+.radius-example strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+}
+
 .resource-info {
   display: flex;
   flex-direction: column;
@@ -525,6 +661,34 @@ kbd {
   
   .resources-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .danger-zones-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .danger-item {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .danger-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    margin: 0 auto;
+  }
+  
+  .radius-grid {
+    grid-template-columns: repeat(5, 20px);
+    grid-template-rows: repeat(5, 20px);
+  }
+  
+  .grid-cell {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
   }
   
   #game-board {

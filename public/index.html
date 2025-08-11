@@ -238,6 +238,60 @@
             <li>Player with highest score wins!</li>
           </ul>
         </div>
+        
+        <div class="help-section">
+          <h4>⚠️ Traps & Danger Zones</h4>
+          <div class="danger-zones-grid">
+            <div class="danger-item bomb-danger">
+              <div class="danger-icon">💣</div>
+              <div class="danger-info">
+                <h5>Time Bomb</h5>
+                <p><strong>Visible:</strong> Yes, with pulsing red animation</p>
+                <p><strong>Timer:</strong> Explodes in 1-6 seconds (random)</p>
+                <p><strong>Explosion Radius:</strong> 3 tiles in all directions (Manhattan distance)</p>
+                <p><strong>Effects:</strong></p>
+                <ul>
+                  <li>✅ <strong>Deactivate:</strong> Step on it before explosion → +4 points</li>
+                  <li>💥 <strong>Explode:</strong> -3 points to all players in radius</li>
+                  <li>🔥 <strong>Chain Reaction:</strong> Destroys all resources in blast radius</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="danger-item freeze-danger">
+              <div class="danger-icon">🧊</div>
+              <div class="danger-info">
+                <h5>Freeze Trap</h5>
+                <p><strong>Visible:</strong> No, completely invisible stealth trap</p>
+                <p><strong>Duration:</strong> Freezes player for 4 seconds</p>
+                <p><strong>Effect Radius:</strong> Single tile (only affects the player who steps on it)</p>
+                <p><strong>Effects:</strong></p>
+                <ul>
+                  <li>❄️ <strong>Immobilization:</strong> Cannot move for 4 seconds</li>
+                  <li>🧊 <strong>Visual Effect:</strong> Ice crystals and blue border around player</li>
+                  <li>⚡ <strong>No Damage:</strong> Only blocks movement, no point loss</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div class="radius-explanation">
+            <h5>📏 Radius Explanation:</h5>
+            <p><strong>Manhattan Distance:</strong> Calculated as |x1-x2| + |y1-y2|</p>
+            <div class="radius-examples">
+              <div class="radius-example">
+                <strong>Radius 3 Example (💣 Bomb):</strong>
+                <div class="radius-grid">
+                  <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell"></div><div class="grid-cell"></div>
+                  <div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell"></div>
+                  <div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell center">💣</div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div>
+                  <div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell affected">×</div><div class="grid-cell"></div>
+                  <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell affected">×</div><div class="grid-cell"></div><div class="grid-cell"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
