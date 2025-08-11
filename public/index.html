@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resource Collector Game</title>
+  <title>RC</title>
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/buttons.css" />
@@ -21,7 +21,10 @@
   <div id="lobby">
     <div class="lobby-header">
       <h2 class="game-title">🎮 Game Lobby</h2>
-      <button id="help-btn" title="Help & Instructions">?</button>
+      <div class="header-buttons">
+        <button id="settings-btn" title="Audio Settings">🔊</button>
+        <button id="help-btn" title="Help & Instructions">?</button>
+      </div>
     </div>
     
     <!-- Контейнер для карточек игроков -->
@@ -65,7 +68,7 @@
       </div>
     </div>
 
-    <button id="start-game-btn" style="display:none;">▶️ Start Game</button>
+    <button id="start-game-btn" style="display:none;">Start Game</button>
   </div>
 
   <!-- 🎮 Игровое поле -->
@@ -145,28 +148,28 @@
         <div class="help-section">
           <h4>💰 Resources & Points</h4>
           <div class="resources-grid">
-            <div class="resource-item">
+            <div class="resource-item" data-rarity="Drop chance: 67% (Common)">
               <div class="resource-icon bronze">🪙</div>
               <div class="resource-info">
                 <strong>Bronze</strong>
                 <span>+1 point</span>
               </div>
             </div>
-            <div class="resource-item">
+            <div class="resource-item" data-rarity="Drop chance: 20% (Uncommon)">
               <div class="resource-icon silver">💵</div>
               <div class="resource-info">
                 <strong>Silver</strong>
                 <span>+2 points</span>
               </div>
             </div>
-            <div class="resource-item">
+            <div class="resource-item" data-rarity="Drop chance: 10% (Rare)">
               <div class="resource-icon gold">💰</div>
               <div class="resource-info">
                 <strong>Gold</strong>
                 <span>+3 points</span>
               </div>
             </div>
-            <div class="resource-item">
+            <div class="resource-item" data-rarity="Drop chance: 3% (Ultra Rare)">
               <div class="resource-icon diamond">💎</div>
               <div class="resource-info">
                 <strong>Diamond</strong>
@@ -180,12 +183,54 @@
           <h4>📋 Game Rules</h4>
           <ul>
             <li>Move around the 20x20 grid to collect resources</li>
-            <li>Different resources give different points</li>
-            <li>💎 Diamonds are ultra rare (3% chance) but worth 10 points!</li>
             <li>Resources respawn randomly across the field</li>
             <li>Game ends when time runs out</li>
             <li>Player with highest score wins!</li>
           </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔊 Модалка настроек звука -->
+  <div id="settings-modal" aria-modal="true" role="dialog">
+    <div class="settings-card">
+      <div class="settings-header">
+        <h3>🔊 Audio Settings</h3>
+        <button id="settings-close" class="close-btn">×</button>
+      </div>
+      <div class="settings-content">
+        <div class="audio-controls">
+          <div class="audio-section">
+            <h4>🎵 Sound Effects</h4>
+            <div class="input-group">
+              <label for="sound-toggle">Enable sound effects when collecting resources</label>
+              <div class="toggle-container">
+                <span>Off</span>
+                <input type="checkbox" id="sound-toggle" checked>
+                <label for="sound-toggle" class="toggle-label">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span>On</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="audio-section">
+            <h4>Volume Control</h4>
+            <div class="input-group">
+              <div class="volume-display">
+                <label for="volume-slider">Master Volume</label>
+                <span id="volume-value">50%</span>
+              </div>
+              <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+            </div>
+          </div>
+          
+          <div class="test-sound-section">
+            <button type="button" id="test-sound" class="btn-secondary">🎵 Test Sound</button>
+            <p class="test-hint">Click to preview the coin pickup sound effect</p>
+          </div>
         </div>
       </div>
     </div>

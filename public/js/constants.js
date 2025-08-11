@@ -25,5 +25,11 @@ export const GAME_LIMITS = {
   MAX_PLAYERS: 4
 };
 
+export const AUDIO_SETTINGS = {
+  DEFAULT_VOLUME: 0.5,
+  DEFAULT_ENABLED: true,
+  STORAGE_KEY: 'audio-settings'
+};
+
 // Типы ресурсов определяются на сервере и приходят через сокеты
 // Никакого дублирования констант!

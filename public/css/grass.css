@@ -3,15 +3,14 @@
 /* Основной стиль игрового поля с травой */
 #game-board {
   display: grid;
+  background-color: rgb(216, 216, 216);
   grid-template-columns: repeat(20, 30px);
   grid-template-rows: repeat(20, 30px);
   gap: 0;
   margin: 40px auto;
-  width: 630px;
-  /* height: 600px; */
+  width: 620px;
   border: 8px solid #2d5016;
-  border-radius: 20px;
-  /* padding: 8px; */
+  /* border-radius: 20px; */
   position: relative;
   box-shadow: 
     0 12px 35px rgba(0, 0, 0, 0.4),
@@ -19,9 +18,14 @@
     0 0 0 2px #4a7c2a,
     0 0 0 4px #2d5016;
   
-  /* Базовый градиент поля - натуральные оттенки травы */
-  /* background: 
-    linear-gradient(135deg, #4a7c59 0%, #5d8a6b 25%, #6b9577 50%, #5d8a6b 75%, #4a7c59 100%); */
+  /* Объединяем border-image сюда */
+  border-image: linear-gradient(45deg, 
+    #2d5016 0%, 
+    #4a7c2a 25%, 
+    #5d8a3d 50%, 
+    #4a7c2a 75%, 
+    #2d5016 100%
+  ) 1;
   
   /* Многослойная текстура травы */
   background-image: 
@@ -114,10 +118,10 @@
   border: 3px solid #000;
   border-radius: 50%;
   z-index: 2;
-  box-shadow: 
+  /* box-shadow: 
     0 3px 12px rgba(0, 0, 0, 0.5),
     0 0 0 2px rgba(255, 255, 255, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.2); */
   /* Убираем transition для плавности движения */
   /* transition: all 0.2s ease; */
 }
@@ -335,18 +339,6 @@
 @keyframes fieldAura {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.5; }
-}
-
-/* Стиль для границы поля */
-#game-board {
-  border: 4px solid;
-  border-image: linear-gradient(45deg, 
-    #2d5016 0%, 
-    #4a7c2a 25%, 
-    #5d8a3d 50%, 
-    #4a7c2a 75%, 
-    #2d5016 100%
-  ) 1;
 }
 
 /* Эффект росы на траве (статичный) */

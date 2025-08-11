@@ -10,7 +10,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-#game-board {
+/* #game-board {
   display: grid;
   grid-template-columns: repeat(20, 30px);
   grid-template-rows: repeat(20, 30px);
@@ -21,7 +21,7 @@
   border: 2px solid #dee2e6;
   border-radius: 8px;
   padding: 10px;
-}
+} */
 
 #timer {
   position: fixed;
@@ -319,11 +319,58 @@ kbd {
   border-radius: 10px;
   border: 1px solid #e9ecef;
   transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
 }
 
 .resource-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltip стили */
+.resource-item::after {
+  content: attr(data-rarity);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resource-item::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.resource-item:hover::after,
+.resource-item:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
 }
 
 .resource-icon {

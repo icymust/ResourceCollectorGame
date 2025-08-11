@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { GRID } from "./constants.js";
+import { audioManager } from "./audio.js";
 
 // Рендер-пайплайн
 let pending = { players: null, resources: null };
@@ -10,6 +11,7 @@ const resourceSet = new Set(); // "x,y" для быстрого сравнени
 
 let board = null;
 let scoreboard = null;
+let lastResourceCount = 0; // Для отслеживания собранных ресурсов
 
 export function initBoard() {
   board = document.getElementById("game-board");
@@ -76,6 +78,13 @@ function renderFrame() {
 
   // Ресурсы: дифф по множеству
   if (pending.resources) {
+    // Проверяем, уменьшилось ли количество ресурсов (значит кто-то собрал)
+    if (lastResourceCount > 0 && pending.resources.length < lastResourceCount) {
+      // Воспроизводим звук сбора ресурса
+      audioManager.play('coin-pickup');
+    }
+    lastResourceCount = pending.resources.length;
+
     // убрать отсутствующие
     const nextSet = new Set(pending.resources.map((r) => `${r.x},${r.y}`));
     if (resourceSet.size) {

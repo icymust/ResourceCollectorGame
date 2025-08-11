@@ -1,5 +1,6 @@
 import { state, setPlayerName, setHostId, setGameTime, setQuitModalOpen } from './state.js';
 import * as net from './net.js';
+import { audioManager } from './audio.js';
 
 let lobby = null;
 let playerList = null;
@@ -20,6 +21,9 @@ let quitNo = null;
 let helpBtn = null;
 let helpModal = null;
 let helpClose = null;
+let settingsBtn = null;
+let settingsModal = null;
+let settingsClose = null;
 
 export function bindUI() {
   // Получаем DOM элементы
@@ -42,6 +46,9 @@ export function bindUI() {
   helpBtn = document.getElementById('help-btn');
   helpModal = document.getElementById('help-modal');
   helpClose = document.getElementById('help-close');
+  settingsBtn = document.getElementById('settings-btn');
+  settingsModal = document.getElementById('settings-modal');
+  settingsClose = document.getElementById('settings-close');
 
   // Привязываем обработчики
   setupColorPicker();
@@ -51,6 +58,8 @@ export function bindUI() {
   setupPauseHandlers();
   setupQuitModal();
   setupHelpModal();
+  setupSettingsModal();
+  setupAudioControls();
 }
 
 function setupColorPicker() {
@@ -131,6 +140,55 @@ function setupHelpModal() {
   });
 }
 
+function setupSettingsModal() {
+  settingsBtn.addEventListener('click', toggleSettingsModal);
+  settingsClose.addEventListener('click', closeSettingsModal);
+  
+  // Закрытие по клику вне модального окна
+  settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      closeSettingsModal();
+    }
+  });
+  
+  // Закрытие по Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && settingsModal.style.display === 'flex') {
+      closeSettingsModal();
+    }
+  });
+}
+
+function setupAudioControls() {
+  const soundToggle = document.getElementById('sound-toggle');
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeValue = document.getElementById('volume-value');
+  const testSoundBtn = document.getElementById('test-sound');
+  
+  // Загружаем текущие настройки
+  const settings = audioManager.getSettings();
+  soundToggle.checked = settings.enabled;
+  volumeSlider.value = settings.volume * 100;
+  volumeValue.textContent = `${Math.round(settings.volume * 100)}%`;
+  
+  // Обработчик переключателя звука
+  soundToggle.addEventListener('change', () => {
+    audioManager.setEnabled(soundToggle.checked);
+  });
+  
+  // Обработчик слайдера громкости
+  volumeSlider.addEventListener('input', () => {
+    const volume = volumeSlider.value / 100;
+    audioManager.setVolume(volume);
+    volumeValue.textContent = `${Math.round(volume * 100)}%`;
+  });
+  
+  // Обработчик кнопки тестирования звука
+  testSoundBtn.addEventListener('click', () => {
+    audioManager.play('coin-pickup');
+  });
+}
+
 function toggleHelpModal() {
   if (helpModal.style.display === 'flex') {
     closeHelpModal();
@@ -152,6 +210,24 @@ function closeHelpModal() {
   helpBtn.textContent = '?';
   helpBtn.classList.remove('close');
   helpBtn.title = 'Help & Instructions';
+  document.body.style.overflow = 'hidden'; // Оставляем скролл заблокированным
+}
+
+function toggleSettingsModal() {
+  if (settingsModal.style.display === 'flex') {
+    closeSettingsModal();
+  } else {
+    openSettingsModal();
+  }
+}
+
+function openSettingsModal() {
+  settingsModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden'; // Предотвращаем скролл фона
+}
+
+function closeSettingsModal() {
+  settingsModal.style.display = 'none';
   document.body.style.overflow = 'hidden'; // Оставляем скролл заблокированным
 }
 
