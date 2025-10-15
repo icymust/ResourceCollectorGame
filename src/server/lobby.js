@@ -1,4 +1,5 @@
 const state = require("./state");
+const game = require("./game");
 
 function joinPlayer(socket, io) {
   const playerId = socket.id;
@@ -11,36 +12,61 @@ function joinPlayer(socket, io) {
     y: 0,
     score: 0,
     ready: false,
+    inGame: state.getGameStatus() === 'started' ? false : undefined,
   };
 
   state.addPlayer(playerId, playerData);
-  broadcastLobby(io);
+  if (state.getGameStatus() === 'started') {
+    // player joins queue while round is running
+    broadcastQueue(io);
+    // also send current active players to keep board for others unchanged
+    const activePlayersObj = Object.fromEntries(
+      Object.entries(state.getPlayers()).filter(([, p]) => p.inGame)
+    );
+    io.emit('updatePlayers', activePlayersObj);
+  } else {
+    broadcastLobby(io);
+  }
 }
 
 function leavePlayer(socket, io) {
   const playerId = socket.id;
+  const wasInGame = state.getPlayer(playerId)?.inGame === true;
   state.removePlayer(playerId);
 
-  // Если игроков не осталось, сбрасываем игру
   if (state.getPlayerCount() === 0) {
     resetGameState();
   }
 
-  broadcastLobby(io);
+  if (state.getGameStatus() === 'started') {
+    // if active players < 2 -> end game
+    const activeCount = Object.values(state.getPlayers()).filter(p => p.inGame).length;
+    if (wasInGame && activeCount < 2) {
+      game.endGameByTimeout(io);
+      return;
+    }
+    // update active board for players in round
+    const activePlayersObj = Object.fromEntries(
+      Object.entries(state.getPlayers()).filter(([, p]) => p.inGame)
+    );
+    io.emit('updatePlayers', activePlayersObj);
+    // update queue view for queued players
+    broadcastQueue(io);
+  } else {
+    broadcastLobby(io);
+  }
 }
 
 function setPlayerInfo(socket, { name, color }, callback, io) {
   const playerId = socket.id;
   const players = state.getPlayers();
 
-  // Проверяем уникальность имени
   const nameTaken = Object.values(players).some(
     (p) => p.name === name && p.id !== playerId
   );
 
   if (nameTaken) {
-    if (callback)
-      callback({ success: false, message: "Это имя уже используется" });
+    if (callback) callback({ success: false, message: "Name already exists" });
     return;
   }
 
@@ -68,10 +94,8 @@ function setPlayerReady(socket, io) {
 function setGameTime(socket, seconds, io) {
   const hostId = state.getCurrentHostId();
 
-  // Только хост может менять время
   if (socket.id !== hostId) return;
 
-  // Только в лобби
   if (state.getGameStatus() !== "waiting") return;
 
   const s = Number(seconds);
@@ -86,11 +110,11 @@ function setGameTime(socket, seconds, io) {
 function canStartGame(socket) {
   const hostId = state.getCurrentHostId();
 
-  // Только хост может запускать
   if (socket.id !== hostId) return false;
 
-  // Все игроки должны быть готовы
   const players = state.getAllPlayersArray();
+  console.log(players.length);
+  if (players.length > 4 || players.length < 2) return false;
   const allReady = players.length > 0 && players.every((p) => p.ready);
 
   return allReady;
@@ -102,6 +126,16 @@ function broadcastLobby(io) {
     hostId: state.getCurrentHostId(),
     gameTime: state.getGameTime(),
   });
+}
+
+function broadcastQueue(io) {
+  const waiting = state.getAllPlayersArray().filter(p => !p.inGame);
+  for (const p of waiting) {
+    io.to(p.id).emit('updateQueue', {
+      queue: waiting.map(q => ({ id: q.id, name: q.name, color: q.color })),
+      count: waiting.length
+    });
+  }
 }
 
 function resetGameState() {
@@ -125,4 +159,5 @@ module.exports = {
   canStartGame,
   broadcastLobby,
   resetGameState,
+  broadcastQueue,
 };

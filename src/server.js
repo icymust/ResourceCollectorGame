@@ -5,23 +5,22 @@ const path = require('path');
 
 const { registerSocketHandlers } = require('./server/sockets');
 
-// Создаем Express приложение
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Разрешаем все источники для ngrok
+    origin: "*", //ngrok
     methods: ["GET", "POST"],
     allowedHeaders: ["*"],
     credentials: true
   },
-  allowEIO3: true, // Поддержка старых версий socket.io
-  transports: ['websocket', 'polling'] // Поддержка разных транспортов
+  allowEIO3: true, //old socket.io
+  transports: ['websocket', 'polling']
 });
 
-// Middleware для поддержки ngrok
+// Middleware ngrok
 app.use((req, res, next) => {
-  // Добавляем заголовки для работы с ngrok
+  //ngrok
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -34,10 +33,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Статические файлы
+// static files
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Роут для проверки статуса сервера
+// stat serv
 app.get('/health', (req, res) => {
   res.json({
     status: 'online',
@@ -46,106 +45,100 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Главная страница (если нужно)
+//main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-// Регистрируем обработчики сокетов
 registerSocketHandlers(io);
 
-// Определяем порт
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Сервер запущен на порту ${PORT}`);
-  console.log(`📁 Статические файлы: ${path.join(__dirname, '../public')}`);
-  console.log(`🎮 Модульная архитектура загружена`);
-  console.log(`\n📱 Локальные подключения:`);
+  console.log(`Server port: ${PORT}`);
+  console.log(`Static files: ${path.join(__dirname, '../public')}`);
+  console.log(`\nLocal connection`);
   console.log(`   http://localhost:${PORT}`);
   console.log(`   http://127.0.0.1:${PORT}`);
-  console.log(`\n🌐 Для удаленного доступа запустите:`);
+  console.log(`\nwww connection:`);
   console.log(`   ngrok http ${PORT}`);
-  console.log(`\n💡 Для автоматического запуска с ngrok:`);
+  console.log(`For automatic startup with ngrok:`);
   console.log(`   npm run dev-tunnel`);
   
-  // Логирование подключений
   io.on('connection', (socket) => {
     const clientIP = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address;
-    console.log(`👤 Новое подключение: ${socket.id} (IP: ${clientIP})`);
+    console.log(`New player: ${socket.id} (IP: ${clientIP})`);
     
     socket.on('disconnect', () => {
-      console.log(`👋 Отключение: ${socket.id}`);
+      console.log(`Player disconnected: ${socket.id}`);
     });
   });
 });
 
-// Флаг для предотвращения множественного завершения
 let isShuttingDown = false;
 
-// Функция для graceful shutdown
 const gracefulShutdown = (signal) => {
   if (isShuttingDown) {
-    console.log('⚠️ Завершение уже в процессе...');
+    console.log('Shutdown is already in progress...');
     return;
   }
-  
+
   isShuttingDown = true;
-  console.log(`\n🛑 Получен сигнал ${signal}, завершение сервера...`);
-  
-  // Устанавливаем таймаут для принудительного завершения
+  console.log(`\nReceived signal ${signal}, shutting down server...`);
+
+  // Set a timeout for forced shutdown
   const forceShutdownTimer = setTimeout(() => {
-    console.log('⚠️ Принудительное завершение');
+    console.log('Forced shutdown');
     process.exit(1);
   }, 3000);
-  
-  // Уведомляем клиентов о завершении работы
+
+  // Notify clients about shutdown
   try {
-    io.emit('server_shutdown', { message: 'Сервер завершает работу' });
+    io.emit('server_shutdown', { message: 'Server is shutting down' });
   } catch (err) {
-    console.log('Клиентов для уведомления нет');
+    console.log('No clients to notify');
   }
-  
-  // Закрываем HTTP сервер сначала
+
+  // Close HTTP server first
   if (server.listening) {
     server.close((err) => {
       clearTimeout(forceShutdownTimer);
-      
+
       if (err) {
-        console.error('❌ Ошибка при закрытии HTTP сервера:', err);
+        console.error('Error closing HTTP server:', err);
       } else {
-        console.log('✅ HTTP сервер закрыт');
+        console.log('HTTP server closed');
       }
-      
-      // Закрываем Socket.IO соединения
+
+      // Close Socket.IO connections
       io.close(() => {
-        console.log('✅ Socket.IO сервер закрыт');
-        console.log('✅ Сервер успешно остановлен');
+        console.log('Socket.IO server closed');
+        console.log('Server stopped successfully');
         process.exit(0);
       });
     });
   } else {
-    // Если сервер уже не слушает, просто закрываем Socket.IO
+    // If server is not listening, just close Socket.IO
     clearTimeout(forceShutdownTimer);
     io.close(() => {
-      console.log('✅ Socket.IO сервер закрыт');
-      console.log('✅ Сервер успешно остановлен');
+      console.log('Socket.IO server closed');
+      console.log('Server stopped successfully');
       process.exit(0);
     });
   }
 };
 
-// Обработка ошибок
+// Error handling
 process.on('uncaughtException', (err) => {
-  console.error('❌ Необработанная ошибка:', err);
+  console.error('Uncaught exception:', err);
   gracefulShutdown('UNCAUGHT_EXCEPTION');
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Необработанное отклонение промиса:', reason);
+  console.error('Unhandled promise rejection:', reason);
   gracefulShutdown('UNHANDLED_REJECTION');
 });
 
-// Обработка сигналов завершения
+// Handle shutdown signals
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));

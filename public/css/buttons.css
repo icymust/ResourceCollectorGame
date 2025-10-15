@@ -1,5 +1,3 @@
-/* Кнопки */
-
 button {
   padding: 10px 20px;
   font-size: 16px;
@@ -13,7 +11,7 @@ button {
   background: #43b581;
   color: white;
   margin-top: 20px;
-  padding: 10px 47%;
+  padding: 10px 45%;
 }
 
 #start-game-btn:hover {
@@ -46,4 +44,22 @@ button {
 
 #quit-btn:hover {
   background: #e03838;
+}
+
+#restart-btn {
+  position: fixed;
+  top: 10px;
+  right: 240px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0,0,0,.15);
+  display: none;
+}
+
+#restart-btn:hover {
+  background: #0062cc;
 }

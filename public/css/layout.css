@@ -1,5 +1,5 @@
-/* Макет и позиционирование */
-#lobby, #game-container {
+#lobby,
+#game-container {
   display: none;
 }
 
@@ -9,19 +9,6 @@
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
-/* #game-board {
-  display: grid;
-  grid-template-columns: repeat(20, 30px);
-  grid-template-rows: repeat(20, 30px);
-  gap: 2px;
-  margin: 40px auto;
-  width: 660px;
-  background: #dbdbdb;
-  border: 2px solid #dee2e6;
-  border-radius: 8px;
-  padding: 10px;
-} */
 
 #timer {
   position: fixed;
@@ -45,22 +32,21 @@
   position: fixed;
   top: 90px;
   left: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Красивый фиолетово-синий градиент */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: 2px solid rgba(255, 255, 255, 0.3);
   padding: 20px;
   border-radius: 12px;
-  font-size: 16px; /* Увеличили с 14px до 16px */
+  font-size: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   text-align: left;
-  min-width: 280px; /* Увеличили ширину */
-  color: white; /* Белый текст для контраста */
+  min-width: 280px;
+  color: white;
   z-index: 1000;
   transition: all 0.3s ease;
   line-height: 1.6;
-  backdrop-filter: blur(10px); /* Размытие фона для стеклянного эффекта */
+  backdrop-filter: blur(10px);
 }
 
-/* Стили для эффектов в scoreboard */
 #scoreboard .effect-icon {
   display: inline-block;
   margin-left: 8px;
@@ -73,11 +59,11 @@
 }
 
 @keyframes effectPulse {
-  0% { 
+  0% {
     opacity: 0.8;
     transform: scale(0.95);
   }
-  100% { 
+  100% {
     opacity: 1;
     transform: scale(1.05);
   }
@@ -186,7 +172,6 @@
   transform: scale(1.1);
 }
 
-/* ===== МОДАЛЬНОЕ ОКНО ПОМОЩИ ===== */
 #help-modal {
   display: none;
   position: fixed;
@@ -294,7 +279,6 @@
   line-height: 1.4;
 }
 
-/* ===== СЕТКА УПРАВЛЕНИЯ ===== */
 .controls-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -327,7 +311,6 @@ kbd {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== СЕТКА РЕСУРСОВ ===== */
 .resources-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -353,7 +336,6 @@ kbd {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Tooltip стили */
 .resource-item::after {
   content: attr(data-rarity);
   position: absolute;
@@ -375,7 +357,7 @@ kbd {
 }
 
 .resource-item::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -412,58 +394,58 @@ kbd {
 }
 
 .resource-icon.gold {
-  background: linear-gradient(45deg, #FFD700, #FFA500);
+  background: linear-gradient(45deg, #ffd700, #ffa500);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .resource-icon.silver {
-  background: linear-gradient(45deg, #C0C0C0, #A8A8A8);
+  background: linear-gradient(45deg, #c0c0c0, #a8a8a8);
   box-shadow: 0 0 12px rgba(192, 192, 192, 0.4);
 }
 
 .resource-icon.bronze {
-  background: linear-gradient(45deg, #B8621E, #8B4513);
+  background: linear-gradient(45deg, #b8621e, #8b4513);
   box-shadow: 0 0 10px rgba(184, 98, 30, 0.4);
 }
 
 .resource-icon.diamond {
-  background: linear-gradient(45deg, #68dbfaff, #4FC3F7);
+  background: linear-gradient(45deg, #68dbfaff, #4fc3f7);
   box-shadow: 0 0 20px rgba(104, 219, 250, 0.6);
 }
 
 .resource-icon.special {
-  background: linear-gradient(45deg, #FFE55C, #FFD700);
+  background: linear-gradient(45deg, #ffe55c, #ffd700);
   box-shadow: 0 0 15px rgba(255, 229, 92, 0.6);
 }
 
 .resource-icon.magnet {
-  background: linear-gradient(45deg, #FF4444, #CC3333);
+  background: linear-gradient(45deg, #ff4444, #cc3333);
   box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
 }
 
 .resource-icon.teleport {
-  background: linear-gradient(45deg, #9966FF, #7744DD);
+  background: linear-gradient(45deg, #9966ff, #7744dd);
   box-shadow: 0 0 15px rgba(153, 102, 255, 0.6);
 }
 
 .resource-icon.bomb {
-  background: linear-gradient(45deg, #FF0000, #DD0000);
+  background: linear-gradient(45deg, #ff0000, #dd0000);
   box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
   animation: pulse 1.5s ease-in-out infinite alternate;
 }
 
 .resource-icon.freeze {
-  background: linear-gradient(45deg, #00BFFF, #0099CC);
+  background: linear-gradient(45deg, #00bfff, #0099cc);
   box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
 }
 
 .resource-icon.confusion {
-  background: linear-gradient(45deg, #FF69B4, #CC1493);
+  background: linear-gradient(45deg, #ff69b4, #cc1493);
   box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
 }
 
 .resource-icon.ghostMode {
-  background: linear-gradient(45deg, #9966CC, #6633AA);
+  background: linear-gradient(45deg, #9966cc, #6633aa);
   box-shadow: 0 0 15px rgba(153, 102, 204, 0.8);
   animation: ghostModeResource 2s ease-in-out infinite alternate;
 }
@@ -478,7 +460,8 @@ kbd {
 }
 
 @keyframes poisonPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
     border-left-color: #28a745;
   }
@@ -499,7 +482,6 @@ kbd {
   }
 }
 
-/* ===== СТИЛИ ДЛЯ ЛОВУШЕК И ОПАСНОСТЕЙ ===== */
 .danger-zones-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -523,7 +505,7 @@ kbd {
 }
 
 .danger-item.confusion-danger {
-  border-left-color: #FF69B4;
+  border-left-color: #ff69b4;
   box-shadow: 0 2px 8px rgba(255, 105, 180, 0.1);
 }
 
@@ -556,7 +538,7 @@ kbd {
 }
 
 .confusion-danger .danger-icon {
-  background: linear-gradient(45deg, #FF69B4, #CC1493);
+  background: linear-gradient(45deg, #ff69b4, #cc1493);
   box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
 }
 
@@ -578,14 +560,13 @@ kbd {
 }
 
 .confusion-danger .danger-info h5 {
-  color: #FF69B4;
+  color: #ff69b4;
 }
 
 .poison-danger .danger-info h5 {
   color: #28a745;
 }
 
-/* ===== СТИЛИ ДЛЯ ПОЛЕЗНЫХ ЭФФЕКТОВ ===== */
 .effects-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -632,13 +613,13 @@ kbd {
   justify-content: center;
   font-size: 24px;
   flex-shrink: 0;
-  background: linear-gradient(45deg, #9966CC, #6633AA);
+  background: linear-gradient(45deg, #9966cc, #6633aa);
   box-shadow: 0 0 15px rgba(153, 102, 204, 0.4);
 }
 
 .effect-info h5 {
   margin: 0 0 8px 0;
-  color: #9966CC;
+  color: #9966cc;
   font-size: 1.1rem;
   font-weight: bold;
 }
@@ -671,26 +652,16 @@ kbd {
   }
 }
 
-/* ===== СТИЛИ ДЛЯ СТРАТЕГИЧЕСКИХ СОВЕТОВ ===== */
 .strategy-section {
   margin-top: 20px;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(0, 123, 255, 0.05), rgba(40, 167, 69, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 123, 255, 0.05),
+    rgba(40, 167, 69, 0.05)
+  );
   border: 2px solid rgba(0, 123, 255, 0.2);
   border-radius: 12px;
-}
-
-.strategy-section h4 {
-  color: #0d6efd;
-  margin-bottom: 15px;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.strategy-tips {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
 }
 
 .tip-category {
@@ -834,7 +805,6 @@ kbd {
   font-size: 0.9rem;
 }
 
-/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   #timer {
     top: 10px;
@@ -843,7 +813,7 @@ kbd {
     font-size: 1.1rem;
     min-width: 100px;
   }
-  
+
   #scoreboard {
     top: 60px;
     left: 10px;
@@ -851,63 +821,63 @@ kbd {
     min-width: 200px;
     font-size: 12px;
   }
-  
+
   #status-indicator {
     top: 10px;
     right: 10px;
     width: 14px;
     height: 14px;
   }
-  
+
   .help-card {
     width: 95vw;
     max-height: 90vh;
   }
-  
+
   .help-header {
     padding: 15px 20px;
   }
-  
+
   .help-content {
     padding: 20px;
   }
-  
+
   .controls-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .resources-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .danger-zones-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .danger-item {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
-  
+
   .danger-icon {
     width: 40px;
     height: 40px;
     font-size: 20px;
     margin: 0 auto;
   }
-  
+
   .radius-grid {
     grid-template-columns: repeat(5, 20px);
     grid-template-rows: repeat(5, 20px);
   }
-  
+
   .grid-cell {
     width: 20px;
     height: 20px;
     font-size: 10px;
   }
-  
+
   #game-board {
     grid-template-columns: repeat(20, 25px);
     grid-template-rows: repeat(20, 25px);

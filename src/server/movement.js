@@ -2,24 +2,22 @@ const state = require('./state');
 const resources = require('./resources');
 
 function handleMove(socket, direction, io) {
-  // Проверяем состояние игры
   if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
   
   const playerId = socket.id;
   const player = state.getPlayer(playerId);
   
-  if (!player) return;
+  if (!player || !player.inGame) return; // ignore lobby players
   
-  // Проверяем, не заморожен ли игрок
   if (player.frozenUntil && Date.now() < player.frozenUntil) {
-    return; // Игрок заморожен и не может двигаться
+    return; //player is frozen and cannot move
   }
 
-  // Сохраняем старые координаты для проверки
+  //save old coordinates for validation
   const oldX = player.x;
   const oldY = player.y;
 
-  // Обновляем позицию с учетом тора (20x20)
+  //update position with torus logic (20x20)
   switch (direction) {
     case 'left':
       player.x = (player.x - 1 + 20) % 20;
@@ -34,29 +32,32 @@ function handleMove(socket, direction, io) {
       player.y = (player.y + 1) % 20;
       break;
     default:
-      return; // Неизвестное направление
+  return; //unknown direction
   }
 
-  // Проверяем сбор ресурсов
+  //check resource collection
   const resourceCollected = resources.collectResource(player.x, player.y, player);
 
-  // Отправляем обновления
-  io.emit('updatePlayers', state.getPlayers());
+  //send updates
+  const activePlayers = Object.fromEntries(
+    Object.entries(state.getPlayers()).filter(([, p]) => p.inGame)
+  );
+  io.emit('updatePlayers', activePlayers);
   
-  // Отправляем ресурсы только если что-то собрали
+  //send resources only if something was collected
   if (resourceCollected) {
     io.emit('updateResources', state.getResources());
-    // Отправляем специальное событие для звука сбора
+    //send special event for collection sound
     socket.emit('resourceCollected');
   }
 }
 
-// Валидация направления
+//direction validation
 function isValidDirection(direction) {
   return ['left', 'right', 'up', 'down'].includes(direction);
 }
 
-// Получить новые координаты без изменения состояния (для предварительной проверки)
+//get new coordinates without changing state (for pre-check)
 function getNewPosition(x, y, direction) {
   switch (direction) {
     case 'left':
@@ -72,7 +73,7 @@ function getNewPosition(x, y, direction) {
   }
 }
 
-// Проверка коллизий (если понадобится)
+//collision check (if needed)
 function checkCollision(x, y, excludePlayerId = null) {
   const players = state.getPlayers();
   

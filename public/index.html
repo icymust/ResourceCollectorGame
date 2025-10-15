@@ -73,7 +73,8 @@
 
   <!-- 🎮 Игровое поле -->
   <div id="game-container">
-    <button id="quit-btn" title="End game for everyone">Quit Game</button>
+  <button id="quit-btn" title="End game for everyone">Quit Game</button>
+  <button id="restart-btn" title="Restart round" style="display:none;">Restart</button>
     <div id="timer">Time: 60</div>
     <div id="scoreboard"></div>
     <div id="game-board"></div>
@@ -82,15 +83,14 @@
   <!-- ⏸ Оверлей паузы -->
   <div id="pause-overlay">
     <div class="pause-card">
-      <h2>Игра на паузе</h2>
+      <h2>Pause</h2>
       <div class="pause-buttons">
-        <button id="resume-btn" class="pause-btn resume-btn">Продолжить</button>
-        <button id="quit-from-pause" class="pause-btn quit-btn">Выйти</button>
+        <button id="resume-btn" class="pause-btn resume-btn">Continue</button>
+        <button id="quit-from-pause" class="pause-btn quit-btn">Quit</button>
       </div>
     </div>
   </div>
 
-  <!-- 🔴 Модалка подтверждения выхода -->
   <div id="quit-modal" aria-modal="true" role="dialog">
     <div class="qm-card">
       <h3>End game?</h3>
@@ -102,7 +102,6 @@
     </div>
   </div>
 
-  <!-- ❓ Модалка с инструкциями -->
   <div id="help-modal" aria-modal="true" role="dialog">
     <div class="help-card">
       <div class="help-header">
@@ -252,8 +251,7 @@
             <li>Resources respawn randomly across the field every 2 seconds</li>
             <li><strong>Special Effects:</strong> Some resources grant temporary powers</li>
             <li><strong>Danger Zones:</strong> Time Bombs explode after 1-6 seconds (risk vs reward)</li>
-            <li><strong>Hidden Traps:</strong> Freeze Traps are invisible until triggered</li>
-            <li><strong>Strategy:</strong> Use Teleport to escape danger, Magnet to collect safely</li>
+            <li><strong>Hidden Traps:</strong> Traps are invisible until triggered</li>
             <li>Resources disappear after 7 seconds if not collected</li>
             <li>Game ends when time runs out</li>
             <li>Player with highest score wins!</li>
@@ -389,49 +387,12 @@
               </div>
             </div>
           </div>
-          
-          <div class="strategy-section">
-            <h4>🧠 Strategic Survival Tips</h4>
-            
-            <div class="strategy-tips">
-              <div class="tip-category">
-                <h5>🛡️ Defensive Strategies</h5>
-                <ul>
-                  <li><strong>📱 Use Teleport wisely:</strong> Save for emergencies or escaping multiple dangers</li>
-                  <li><strong>🧲 Magnet for safety:</strong> Collect resources without moving into danger zones</li>
-                  <li><strong>� Ghost Mode tactics:</strong> Use memory to track invisible players, avoid collisions</li>
-                  <li><strong>�👀 Watch for patterns:</strong> Invisible traps create consistent danger zones</li>
-                  <li><strong>⏰ Time management:</strong> Wait for effects to wear off before moving</li>
-                </ul>
-              </div>
-              
-              <div class="tip-category">
-                <h5>⚡ Trap-Specific Tactics</h5>
-                <ul>
-                  <li><strong>🧊 Against Freeze:</strong> Use Teleport or wait - movement is impossible</li>
-                  <li><strong>😵 Against Confusion:</strong> Move slowly, think reversed (↑=↓, ←=→)</li>
-                  <li><strong>☣️ Against Poison:</strong> Move IMMEDIATELY after contact to minimize DOT</li>
-                  <li><strong>💣 Avoid Bombs:</strong> Check 3-tile radius before moving near explosions</li>
-                </ul>
-              </div>
-              
-              <div class="tip-category">
-                <h5>🏆 Advanced Techniques</h5>
-                <ul>
-                  <li><strong>📍 Memory mapping:</strong> Remember where invisible traps activated</li>
-                  <li><strong>⚡ Speed vs Safety:</strong> Sometimes slow movement prevents trap activation</li>
-                  <li><strong>🎯 Resource priority:</strong> Gold/Diamond worth more risk than Bronze</li>
-                  <li><strong>🔄 Effect stacking:</strong> Multiple effects can compound - be extra careful</li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 🔊 Модалка настроек звука -->
+  <!-- Sound-->
   <div id="settings-modal" aria-modal="true" role="dialog">
     <div class="settings-card">
       <div class="settings-header">

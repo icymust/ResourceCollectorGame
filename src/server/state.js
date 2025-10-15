@@ -1,13 +1,13 @@
-// Глобальное состояние сервера
+//global server state
 let players = {};
 let resources = [];
-let gameStatus = 'waiting'; // 'waiting' | 'started'
+let gameStatus = 'waiting'; //'waiting' | 'started'
 let gamePaused = false;
-let gameTime = 60; // длительность раунда (сек)
+let gameTime = 60; //round duration (sec)
 let gameInterval = null;
 let remainingTime = 0;
 
-// Геттеры
+//getters
 const getPlayers = () => players;
 const getResources = () => resources;
 const getGameStatus = () => gameStatus;
@@ -16,7 +16,7 @@ const getGameTime = () => gameTime;
 const getGameInterval = () => gameInterval;
 const getRemainingTime = () => remainingTime;
 
-// Сеттеры
+//setters
 const setPlayers = (newPlayers) => { players = newPlayers; };
 const setResources = (newResources) => { resources = newResources; };
 const setGameStatus = (status) => { gameStatus = status; };
@@ -25,7 +25,7 @@ const setGameTime = (time) => { gameTime = time; };
 const setGameInterval = (interval) => { gameInterval = interval; };
 const setRemainingTime = (time) => { remainingTime = time; };
 
-// Утилиты
+//utils
 const addPlayer = (id, playerData) => { players[id] = playerData; };
 const removePlayer = (id) => { delete players[id]; };
 const getPlayer = (id) => players[id];
@@ -35,7 +35,7 @@ const getAllPlayersArray = () => Object.values(players);
 const addResource = (resource) => { resources.push(resource); };
 const clearResources = () => { resources = []; };
 
-// Вспомогательные функции
+//helper functions
 const getCurrentHostId = () => Object.keys(players)[0];
 
 const resetPlayersReady = () => {
@@ -43,7 +43,7 @@ const resetPlayersReady = () => {
 };
 
 module.exports = {
-  // Геттеры
+  //getters
   getPlayers,
   getResources,
   getGameStatus,
@@ -52,7 +52,7 @@ module.exports = {
   getGameInterval,
   getRemainingTime,
   
-  // Сеттеры
+  //setters
   setPlayers,
   setResources,
   setGameStatus,
@@ -61,18 +61,18 @@ module.exports = {
   setGameInterval,
   setRemainingTime,
   
-  // Утилиты игроков
+  //player utils
   addPlayer,
   removePlayer,
   getPlayer,
   getPlayerCount,
   getAllPlayersArray,
   
-  // Утилиты ресурсов
+  //resource utils
   addResource,
   clearResources,
   
-  // Вспомогательные
+  //helpers
   getCurrentHostId,
   resetPlayersReady
 };

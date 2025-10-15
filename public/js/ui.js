@@ -1,4 +1,4 @@
-import { state, setPlayerName, setHostId, setGameTime, setQuitModalOpen } from './state.js';
+import { state, setPlayerName, setHostId, setGameTime, setQuitModalOpen, getAllPlayers } from './state.js';
 import * as net from './net.js';
 import { audioManager } from './audio.js';
 
@@ -15,6 +15,7 @@ let gameContainer = null;
 let pauseOverlay = null;
 let timerDisplay = null;
 let quitBtn = null;
+let restartBtn = null;
 let quitModal = null;
 let quitYes = null;
 let quitNo = null;
@@ -24,6 +25,21 @@ let helpClose = null;
 let settingsBtn = null;
 let settingsModal = null;
 let settingsClose = null;
+
+const sounds = {
+  START: new Audio('/sounds/intro.mp3'),
+  END: new Audio('/sounds/outro.mp3')
+};
+
+export function playStartSound() {
+  sounds.START.currentTime = 0;
+  sounds.START.play();
+}
+
+export function playEndSound() {
+  sounds.END.currentTime = 0;
+  sounds.END.play();
+}
 
 export function bindUI() {
   // Получаем DOM элементы
@@ -40,6 +56,7 @@ export function bindUI() {
   pauseOverlay = document.getElementById('pause-overlay');
   timerDisplay = document.getElementById('timer');
   quitBtn = document.getElementById('quit-btn');
+  restartBtn = document.getElementById('restart-btn');
   quitModal = document.getElementById('quit-modal');
   quitYes = document.getElementById('quit-yes');
   quitNo = document.getElementById('quit-no');
@@ -60,6 +77,7 @@ export function bindUI() {
   setupHelpModal();
   setupSettingsModal();
   setupAudioControls();
+  setupRestartButton();
 }
 
 function setupColorPicker() {
@@ -312,6 +330,8 @@ export function showGameStarted() {
   gameContainer.style.display = 'block';
   pauseOverlay.style.display = 'none';
   quitBtn.style.display = 'inline-block';
+  // Restart доступен всем игрокам
+  restartBtn.style.display = 'inline-block';
 }
 
 export function updateTimer(time) {
@@ -353,21 +373,25 @@ function setupPauseHandlers() {
   }
 }
 
+function setupRestartButton() {
+  if (!restartBtn) return;
+  restartBtn.addEventListener('click', () => {
+    import('./net.js').then(({ emitRestart }) => emitRestart());
+  });
+}
+
 export function showPauseOverlay(data) {
   if (data.paused) {
     pauseOverlay.style.display = 'flex';
-    // Обновляем заголовок с информацией о том, кто поставил на паузу
     const pauseCard = pauseOverlay.querySelector('.pause-card h2');
     if (pauseCard) {
-      pauseCard.textContent = `Игра на паузе (${data.by})`;
+      pauseCard.textContent = `Game on pause (${data.by})`;
     }
   } else {
-    // Показываем уведомление о возобновлении игры
     const pauseCard = pauseOverlay.querySelector('.pause-card h2');
     if (pauseCard) {
-      pauseCard.textContent = `Игра возобновлена (${data.by})`;
+      pauseCard.textContent = `The game is back on (${data.by})`;
     }
-    // Скрываем через секунду
     setTimeout(() => {
       pauseOverlay.style.display = 'none';
     }, 1000);

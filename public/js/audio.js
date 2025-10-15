@@ -1,110 +1,116 @@
-// Audio Manager для Resource Collector Game
-import { AUDIO_SETTINGS } from './constants.js';
+//audio manager for Resource Collector Game
+import { AUDIO_SETTINGS } from "./constants.js";
 
 export class AudioManager {
   constructor() {
     this.sounds = {};
     this.enabled = AUDIO_SETTINGS.DEFAULT_ENABLED;
     this.volume = AUDIO_SETTINGS.DEFAULT_VOLUME;
-    
-    // Загружаем настройки из localStorage
+
+    //load settings from localStorage
     this.loadSettings();
   }
 
-  // Загрузка звука
+  //load sound
   loadSound(name, path) {
     const audio = new Audio(path);
-    audio.preload = 'auto';
+    audio.preload = "auto";
     audio.volume = this.volume;
     this.sounds[name] = audio;
-    
-    // Обработка ошибок загрузки
-    audio.addEventListener('error', (e) => {
+
+    //handle loading errors
+    audio.addEventListener("error", (e) => {
       console.warn(`Failed to load sound: ${name}`, e);
     });
-    
+
     return audio;
   }
 
-  // Воспроизведение звука
+  //play sound
   play(soundName) {
     if (!this.enabled) return;
-    
+
     const sound = this.sounds[soundName];
     if (sound) {
-      // Сброс позиции для повторного воспроизведения
+      //reset position for replay
       sound.currentTime = 0;
-      
+
       const playPromise = sound.play();
       if (playPromise !== undefined) {
-        playPromise.catch(error => {
+        playPromise.catch((error) => {
           console.warn(`Sound playback failed: ${soundName}`, error);
         });
       }
     }
   }
 
-  // Включение/выключение звуков
+  //enable/disable sounds
   setEnabled(enabled) {
     this.enabled = enabled;
     this.saveSettings();
   }
 
-  // Установка громкости (0.0 - 1.0)
+  //set volume (0.0 - 1.0)
   setVolume(volume) {
     this.volume = Math.max(0, Math.min(1, volume));
-    
-    // Обновляем громкость всех загруженных звуков
-    Object.values(this.sounds).forEach(sound => {
+
+    //update volume for all loaded sounds
+    Object.values(this.sounds).forEach((sound) => {
       sound.volume = this.volume;
     });
-    
+
     this.saveSettings();
   }
 
-  // Получение текущих настроек
+  //get current settings
   getSettings() {
     return {
       enabled: this.enabled,
-      volume: this.volume
+      volume: this.volume,
     };
   }
 
-  // Сохранение настроек в localStorage
+  //save settings to localStorage
   saveSettings() {
     const settings = {
       enabled: this.enabled,
-      volume: this.volume
+      volume: this.volume,
     };
     localStorage.setItem(AUDIO_SETTINGS.STORAGE_KEY, JSON.stringify(settings));
   }
 
-  // Загрузка настроек из localStorage
+  //load settings from localStorage
   loadSettings() {
     try {
       const saved = localStorage.getItem(AUDIO_SETTINGS.STORAGE_KEY);
       if (saved) {
         const settings = JSON.parse(saved);
-        this.enabled = settings.enabled !== undefined ? settings.enabled : AUDIO_SETTINGS.DEFAULT_ENABLED;
-        this.volume = settings.volume !== undefined ? settings.volume : AUDIO_SETTINGS.DEFAULT_VOLUME;
+        this.enabled =
+          settings.enabled !== undefined
+            ? settings.enabled
+            : AUDIO_SETTINGS.DEFAULT_ENABLED;
+        this.volume =
+          settings.volume !== undefined
+            ? settings.volume
+            : AUDIO_SETTINGS.DEFAULT_VOLUME;
       }
     } catch (error) {
-      console.warn('Failed to load audio settings:', error);
-      // Используем настройки по умолчанию
+      console.warn("Failed to load audio settings:", error);
+      //use default settings
       this.enabled = AUDIO_SETTINGS.DEFAULT_ENABLED;
       this.volume = AUDIO_SETTINGS.DEFAULT_VOLUME;
     }
   }
 
-  // Инициализация всех звуков игры
+  //initialize all game sounds
   initGameSounds() {
-    // Загружаем звук подбора ресурсов
-    this.loadSound('coin-pickup', '/sounds/coin-pickup.wav');
+    //load resource pickup sound
+    this.loadSound("coin-pickup", "/sounds/coin-pickup.wav");
   }
 }
 
-// Создаем глобальный экземпляр
+//create global instance
 export const audioManager = new AudioManager();
 
-// Инициализируем звуки при загрузке модуля
+//initialize sounds on module load
 audioManager.initGameSounds();

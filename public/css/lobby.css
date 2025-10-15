@@ -10,29 +10,28 @@ h2 {
   text-align: center;
 }
 
-/* ===== ОСНОВНОЙ КОНТЕЙНЕР ЛОББИ ===== */
+/* ===== Main Lobby ===== */
 #lobby {
   max-width: 1200px;
-  /* height: calc(100vh - 20px); Полная высота минус отступы */
+  /* height: calc(100vh - 20px);*/
   margin: 5% auto;
   padding: 20px;
   background: var(--lobby-primary);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   color: var(--lobby-text);
-  overflow-y: auto; /* Внутренний скролл только для содержимого лобби */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* ===== ЗАГОЛОВОК ЛОББИ ===== */
 .lobby-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 2px solid rgba(255,255,255,0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   position: relative;
 }
 
@@ -40,34 +39,33 @@ h2 {
   margin: 0;
   font-size: 2.2rem;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  background: linear-gradient(45deg, var(--lobby-accent), #FFA500);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, var(--lobby-accent), #ffa500);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   flex: 1;
 }
 
-/* ===== КНОПКИ В ЗАГОЛОВКЕ ===== */
 .header-buttons {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-/* ===== КНОПКА ПОМОЩИ И НАСТРОЕК ===== */
-#help-btn, #settings-btn {
+#help-btn,
+#settings-btn {
   width: 36px;
   height: 36px;
   /* border-radius: 50%; */
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   color: var(--lobby-text);
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   z-index: 100;
   transition: all 0.3s ease;
   display: flex;
@@ -76,11 +74,12 @@ h2 {
   flex-shrink: 0;
 }
 
-#help-btn:hover, #settings-btn:hover {
+#help-btn:hover,
+#settings-btn:hover {
   transform: scale(1.1);
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-color: var(--lobby-accent);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 #help-btn.close {
@@ -93,7 +92,6 @@ h2 {
   background: rgba(200, 35, 51, 0.9);
 }
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
 .lobby-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -102,14 +100,13 @@ h2 {
   min-height: 0;
 }
 
-/* ===== СЕКЦИЯ ИГРОКОВ ===== */
 .players-section {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 15px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -131,12 +128,12 @@ h2 {
 }
 
 .player-count {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   padding: 6px 12px;
   border-radius: 15px;
   font-weight: bold;
   font-size: 0.8rem;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .players-grid {
@@ -147,34 +144,33 @@ h2 {
   flex: 1;
 }
 
-/* ===== КАРТОЧКИ ИГРОКОВ ===== */
 .player-card {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 15px;
   border: 2px solid transparent;
   transition: all 0.3s ease;
   position: relative;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .player-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .player-card.ready {
-  border-color: #4CAF50;
-  box-shadow: 0 0 20px rgba(76,175,80,0.3);
+  border-color: #4caf50;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
 }
 
 .player-card.host::before {
-  content: '👑';
+  content: "👑";
   position: absolute;
   top: 0px;
   right: 0px;
-  background: #FFD700;
+  background: #ffd700;
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -182,7 +178,7 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .player-info {
@@ -196,8 +192,8 @@ h2 {
   height: 28px;
   border-radius: 50%;
   margin-right: 10px;
-  border: 1px solid rgba(255,255,255,0.5);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .player-details h4 {
@@ -209,34 +205,33 @@ h2 {
 
 .player-status {
   font-size: 0.8rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
 .status-ready {
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .status-waiting {
-  color: #FFA500;
+  color: #ffa500;
 }
 
-/* ===== ПАНЕЛЬ НАСТРОЕК ХОСТА ===== */
 #host-controls {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 15px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
 #host-controls::before {
-  content: '⚙️';
+  content: "⚙️";
   position: absolute;
   top: -8px;
   right: -8px;
@@ -248,7 +243,7 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 #host-controls label {
@@ -271,20 +266,20 @@ h2 {
 .time-controls input {
   width: 60px;
   padding: 10px 12px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   color: var(--lobby-text);
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: bold;
   text-align: center;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
 
 .time-controls input:focus {
   box-shadow: 0 0 0 2px var(--lobby-accent);
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
 }
 
@@ -297,33 +292,34 @@ h2 {
 #host-controls small {
   display: block;
   text-align: center;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   font-style: italic;
   font-size: 0.8rem;
   margin-top: 8px;
   padding: 6px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   border-left: 2px solid var(--lobby-accent);
 }
 
-/* ===== СЕКЦИЯ НАСТРОЕК ===== */
 .settings-section {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.player-setup, .host-controls {
-  background: rgba(255,255,255,0.1);
+.player-setup,
+.host-controls {
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.player-setup h3, .host-controls h3 {
+.player-setup h3,
+.host-controls h3 {
   margin: 0 0 15px 0;
   font-size: 1.2rem;
   color: var(--lobby-accent);
@@ -332,7 +328,6 @@ h2 {
   gap: 8px;
 }
 
-/* ===== ФОРМЫ ===== */
 .input-group {
   margin-bottom: 15px;
 }
@@ -353,7 +348,7 @@ h2 {
   border-radius: 8px;
   font-size: 0.9rem;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -363,11 +358,10 @@ h2 {
 
 .input-group input:focus {
   box-shadow: 0 0 0 2px var(--lobby-accent);
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
 }
 
-/* ===== НАСТРОЙКИ ВРЕМЕНИ ===== */
 .time-controls label {
   margin-bottom: 10px;
 }
@@ -397,7 +391,6 @@ h2 {
   margin-top: 4px;
 }
 
-/* ===== КНОПКИ ===== */
 .btn {
   padding: 12px 24px;
   border-radius: 10px;
@@ -409,17 +402,17 @@ h2 {
   overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s;
@@ -432,7 +425,7 @@ h2 {
 
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary {
@@ -474,20 +467,20 @@ h2 {
 
 /* ===== СЕКЦИЯ НАСТРОЙКИ ИГРОКА ===== */
 #player-setup {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 15px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
 
 #player-setup::before {
-  content: '👤';
+  content: "👤";
   position: absolute;
   top: -8px;
   left: -8px;
@@ -499,12 +492,12 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 #player-setup:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .player-setup-content {
@@ -539,32 +532,32 @@ label[for="name-input"] {
 #name-input {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   color: var(--lobby-text);
   border-radius: 10px;
   font-size: 0.9rem;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   text-align: center;
   box-sizing: border-box;
 }
 
 #name-input::placeholder {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-style: italic;
 }
 
 #name-input:focus {
-  box-shadow: 0 0 0 3px rgba(76,175,80,0.3);
-  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
   transform: scale(1.02);
 }
 
 #ready-btn {
   padding: 14px 26px;
-  background: linear-gradient(45deg, #4CAF50, #45a049);
+  background: linear-gradient(45deg, #4caf50, #45a049);
   color: white;
   border: none;
   border-radius: 20px;
@@ -572,7 +565,7 @@ label[for="name-input"] {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(76,175,80,0.3);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
@@ -582,13 +575,13 @@ label[for="name-input"] {
 }
 
 #ready-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s;
@@ -601,8 +594,8 @@ label[for="name-input"] {
 
 #ready-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(76,175,80,0.4);
-  background: linear-gradient(45deg, #5CBF60, #4CAF50);
+  box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(45deg, #5cbf60, #4caf50);
 }
 
 #ready-btn:active {
@@ -610,8 +603,8 @@ label[for="name-input"] {
 }
 
 #ready-btn:disabled {
-  background: rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -627,12 +620,12 @@ label[for="name-input"] {
     gap: 15px;
     align-items: center;
   }
-  
+
   .game-title {
     font-size: 1.8rem;
     text-align: center;
   }
-  
+
   #help-btn {
     width: 32px;
     height: 32px;
@@ -647,7 +640,7 @@ label[for="name-input"] {
   .game-title {
     font-size: 1.5rem;
   }
-  
+
   #help-btn {
     width: 28px;
     height: 28px;
@@ -781,14 +774,17 @@ label[for="name-input"] {
   background: white;
   border-radius: 50%;
   transition: transform 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-container input[type="checkbox"]:checked + .toggle-label {
   background: #28a745;
 }
 
-.toggle-container input[type="checkbox"]:checked + .toggle-label .toggle-slider {
+.toggle-container
+  input[type="checkbox"]:checked
+  + .toggle-label
+  .toggle-slider {
   transform: translateX(24px);
 }
 
@@ -823,7 +819,7 @@ label[for="name-input"] {
   border-radius: 50%;
   background: #28a745;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: background 0.2s ease;
 }
 
@@ -839,7 +835,7 @@ label[for="name-input"] {
   background: #28a745;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== ТЕСТИРОВАНИЕ ЗВУКА ===== */
@@ -867,7 +863,7 @@ label[for="name-input"] {
 .btn-secondary:hover {
   background: #5a6268;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .test-hint {

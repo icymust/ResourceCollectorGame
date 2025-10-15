@@ -1,32 +1,94 @@
-const state = require('./state');
+const state = require("./state");
 
-// Типы ресурсов
+//resource types
 const RESOURCE_TYPES = [
-  { type: 'bronze',       points: 1,  rarity: 0.35, color: '#B8621E', symbol: '🪙' }, // Основной ресурс
-  { type: 'silver',       points: 2,  rarity: 0.25, color: '#C0C0C0', symbol: '💵' }, // Частый
-  { type: 'gold',         points: 3,  rarity: 0.15, color: '#FFD700', symbol: '💰' }, // Хороший
-  { type: 'doublePoints', points: 0,  rarity: 0.10, color: '#FFE55C', symbol: '✨', effect: 'doublePoints' }, // Полезный баф
-  { type: 'magnet',       points: 0,  rarity: 0.06, color: '#FF4444', symbol: '🧲', effect: 'magnet' }, // Редкий баф
-  { type: 'teleport',     points: 0,  rarity: 0.04, color: '#9966FF', symbol: '🌀', effect: 'teleport' }, // Эскейп
-  { type: 'timeBomb',     points: 4,  rarity: 0.025, color: '#FF0000', symbol: '💣', effect: 'timeBomb' }, // Риск/награда
-  { type: 'confusionTrap', points: 0, rarity: 0.01, color: '#FF69B4', symbol: '😵', effect: 'confusion' }, // Ловушка путаницы
-  { type: 'freezeTrap',   points: 0,  rarity: 0.008, color: '#00BFFF', symbol: '🧊', effect: 'freeze' }, // Редкая ловушка  
-  { type: 'poisonTrap',   points: -2, rarity: 0.007, color: '#32CD32', symbol: '☣️', effect: 'poison' }, // Ядовитая ловушка
-  { type: 'ghostMode',    points: 2,  rarity: 0.05, color: '#9966CC', symbol: '👻', effect: 'ghostMode' }, // Призрачный режим - для тестирования 5%
-  { type: 'diamond',      points: 10, rarity: 0.005, color: '#68dbfaff', symbol: '💎' }, // Джекпот
+  { type: "bronze", points: 1, rarity: 0.35, color: "#B8621E", symbol: "🪙" },
+  { type: "silver", points: 2, rarity: 0.25, color: "#C0C0C0", symbol: "💵" },
+  { type: "gold", points: 3, rarity: 0.15, color: "#FFD700", symbol: "💰" },
+  {
+    type: "doublePoints",
+    points: 0,
+    rarity: 0.1,
+    color: "#FFE55C",
+    symbol: "✨",
+    effect: "doublePoints",
+  },
+  {
+    type: "magnet",
+    points: 0,
+    rarity: 0.06,
+    color: "#FF4444",
+    symbol: "🧲",
+    effect: "magnet",
+  },
+  {
+    type: "teleport",
+    points: 0,
+    rarity: 0.04,
+    color: "#9966FF",
+    symbol: "🌀",
+    effect: "teleport",
+  },
+  {
+    type: "timeBomb",
+    points: 4,
+    rarity: 0.025,
+    color: "#FF0000",
+    symbol: "💣",
+    effect: "timeBomb",
+  },
+  {
+    type: "confusionTrap",
+    points: 0,
+    rarity: 0.01,
+    color: "#FF69B4",
+    symbol: "😵",
+    effect: "confusion",
+  },
+  {
+    type: "freezeTrap",
+    points: 0,
+    rarity: 0.008,
+    color: "#00BFFF",
+    symbol: "🧊",
+    effect: "freeze",
+  },
+  {
+    type: "poisonTrap",
+    points: -2,
+    rarity: 0.007,
+    color: "#32CD32",
+    symbol: "☣️",
+    effect: "poison",
+  },
+  {
+    type: "ghostMode",
+    points: 2,
+    rarity: 0.05,
+    color: "#9966CC",
+    symbol: "👻",
+    effect: "ghostMode",
+  },
+  {
+    type: "diamond",
+    points: 10,
+    rarity: 0.005,
+    color: "#68dbfaff",
+    symbol: "💎",
+  },
 ];
 
 let spawnIntervalId = null;
 let cleanupIntervalId = null;
-let magnetIntervalId = null; // Интервал для обработки магнитного эффекта
-let bombIntervalId = null; // Интервал для обработки бомб
-let poisonIntervalId = null; // Интервал для обработки яда
+let magnetIntervalId = null; //magnet effect interval
+let bombIntervalId = null; //bombs interval
+let poisonIntervalId = null; //poison interval
 
 function pickResourceTypeWeighted() {
   const r = Math.random();
   let acc = 0;
   let selected = RESOURCE_TYPES[RESOURCE_TYPES.length - 1];
-  
+
   for (const t of RESOURCE_TYPES) {
     acc += t.rarity;
     if (r <= acc) {
@@ -34,25 +96,29 @@ function pickResourceTypeWeighted() {
       break;
     }
   }
-  
+
   return selected;
 }
 
 function spawnResource(io) {
-  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
+  if (state.getGameStatus() !== "started" || state.isGamePaused()) return;
 
   const selected = pickResourceTypeWeighted();
   const players = state.getPlayers();
   const resources = state.getResources();
 
-  // Не спавнить поверх игрока/другого ресурса (до 20 попыток)
+  //do not spawn on top of player/other resource (up to 20 tries)
   for (let tries = 0; tries < 20; tries++) {
     const x = Math.floor(Math.random() * 20);
     const y = Math.floor(Math.random() * 20);
 
-    const occupiedByPlayer = Object.values(players).some(p => p.x === x && p.y === y);
-    const occupiedByResource = resources.some(res => res.x === x && res.y === y);
-    
+    const occupiedByPlayer = Object.values(players).some(
+      (p) => p.x === x && p.y === y
+    );
+    const occupiedByResource = resources.some(
+      (res) => res.x === x && res.y === y
+    );
+
     if (occupiedByPlayer || occupiedByResource) continue;
 
     const resource = {
@@ -62,21 +128,21 @@ function spawnResource(io) {
       points: selected.points,
       color: selected.color,
       symbol: selected.symbol,
-      effect: selected.effect, // Добавляем эффект если есть
-      spawnTime: Date.now() // Добавляем время спавна
+      effect: selected.effect, //add effect if present
+      spawnTime: Date.now(), //add spawn time
     };
-    
-    // Если это бомба, добавляем таймер взрыва
-    if (selected.type === 'timeBomb') {
-      // Случайное время взрыва от 1 до 6 секунд
+
+    //if it's a bomb, add explosion timer
+    if (selected.type === "timeBomb") {
+      //random explosion time from 1 to 6 seconds
       const randomTime = Math.floor(Math.random() * 6000) + 1000; // 1000-6000 мс
       resource.explodeTime = Date.now() + randomTime;
-      resource.isBlinking = true; // Флаг для мигания
-      resource.canDeactivate = true; // Флаг что бомбу можно деактивировать
+      resource.isBlinking = true; //blinking flag
+      resource.canDeactivate = true; //bomb can be deactivated flag
     }
-    
+
     state.addResource(resource);
-    io.emit('updateResources', state.getResources());
+    io.emit("updateResources", state.getResources());
     return;
   }
 }
@@ -84,13 +150,13 @@ function spawnResource(io) {
 function startSpawning(io) {
   stopSpawning();
   spawnIntervalId = setInterval(() => spawnResource(io), 2000);
-  // Запускаем очистку старых ресурсов каждые 5 секунд
+  //cleanup old resources every 5 seconds
   cleanupIntervalId = setInterval(() => cleanupExpiredResources(io), 10000);
-  // Запускаем обработку магнитных эффектов каждые 500мс для плавности
+  //process magnet effects every 500ms for smoothness
   magnetIntervalId = setInterval(() => processMagnetEffects(io), 500);
-  // Запускаем обработку бомб каждые 100мс для точности
+  //process bombs every 100ms for accuracy
   bombIntervalId = setInterval(() => processBombEffects(io), 100);
-  // Запускаем обработку яда каждые 2 секунды
+  //process poison every 2 seconds
   poisonIntervalId = setInterval(() => processPoisonEffects(io), 2000);
 }
 
@@ -118,20 +184,20 @@ function stopSpawning() {
 }
 
 function cleanupExpiredResources(io) {
-  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
-  
+  if (state.getGameStatus() !== "started" || state.isGamePaused()) return;
+
   const resources = state.getResources();
   const currentTime = Date.now();
-  const RESOURCE_LIFETIME = 7000; // 7 секунд жизни ресурса
-  
-  const validResources = resources.filter(res => {
-    return (currentTime - res.spawnTime) < RESOURCE_LIFETIME;
+  const RESOURCE_LIFETIME = 7000; //7 sec resource lifetime
+
+  const validResources = resources.filter((res) => {
+    return currentTime - res.spawnTime < RESOURCE_LIFETIME;
   });
-  
-  // Если что-то было удалено, обновляем состояние
+
+  //if something was deleted, update state
   if (validResources.length < resources.length) {
     state.setResources(validResources);
-    io.emit('updateResources', validResources);
+    io.emit("updateResources", validResources);
   }
 }
 
@@ -145,42 +211,43 @@ function collectResource(playerX, playerY, player) {
 
   const newResources = resources.filter((res) => {
     if (res.x === playerX && res.y === playerY) {
-      // Специальная обработка для бомб
-      if (res.type === 'timeBomb' && res.canDeactivate) {
+      //special handling for bombs
+      if (res.type === "timeBomb" && res.canDeactivate) {
         bombDeactivated = true;
-        collectedPoints += (res.points || 0);
+        collectedPoints += res.points || 0;
         collected = true;
-        // Для бомб не применяем эффект взрыва, а деактивируем их
-        return false; // удалить деактивированную бомбу
-      } else if (res.type === 'timeBomb') {
-        // Если бомба уже не может быть деактивирована, не подбираем её
-        return true; // оставить бомбу
+        //do not apply explosion effect for bombs, just deactivate
+        return false; //remove deactivated bomb
+      } else if (res.type === "timeBomb") {
+        //if bomb can't be deactivated, don't pick it up
+        return true; //keep bomb
       } else {
-        // Обычная обработка ресурсов
-        collectedPoints += (res.points || 0);
+        //regular resource handling
+        collectedPoints += res.points || 0;
         collected = true;
-        
-        // Проверяем наличие эффекта
+
+        //check for effect
         if (res.effect) {
           hasEffect = true;
           effectType = res.effect;
         }
-        
-        return false; // удалить собранный
+
+        return false; //remove collected
       }
     }
     return true;
   });
 
   if (collected) {
-    // Проверяем эффект двойных очков
-    const hasDoublePoints = player.doublePointsUntil && Date.now() < player.doublePointsUntil;
+    //check double points effect
+    const hasDoublePoints =
+      player.doublePointsUntil && Date.now() < player.doublePointsUntil;
     const finalPoints = hasDoublePoints ? collectedPoints * 2 : collectedPoints;
-    
+
     player.score += finalPoints;
     state.setResources(newResources);
-    
-    // Применяем эффект, если есть (но не для деактивированных бомб)
+
+    //apply effect if present (but not for deactivated bombs)
     if (hasEffect && !bombDeactivated) {
       applyResourceEffect(player, effectType);
     }
@@ -191,21 +258,23 @@ function collectResource(playerX, playerY, player) {
 
 function applyResourceEffect(player, effectType) {
   switch (effectType) {
-    case 'teleport':
-      // Телепортируем игрока в случайную свободную позицию
+    case "teleport":
+      //teleport player to random free position
       const players = state.getPlayers();
       const resources = state.getResources();
-      
-      // Попытаться найти свободную позицию (до 50 попыток)
+
+      //try to find free position (up to 50 tries)
       for (let tries = 0; tries < 50; tries++) {
         const newX = Math.floor(Math.random() * 20);
         const newY = Math.floor(Math.random() * 20);
-        
-        const occupiedByPlayer = Object.values(players).some(p => 
-          p.id !== player.id && p.x === newX && p.y === newY
+
+        const occupiedByPlayer = Object.values(players).some(
+          (p) => p.id !== player.id && p.x === newX && p.y === newY
         );
-        const occupiedByResource = resources.some(res => res.x === newX && res.y === newY);
-        
+        const occupiedByResource = resources.some(
+          (res) => res.x === newX && res.y === newY
+        );
+
         if (!occupiedByPlayer && !occupiedByResource) {
           player.x = newX;
           player.y = newY;
@@ -213,203 +282,211 @@ function applyResourceEffect(player, effectType) {
         }
       }
       break;
-      
-    case 'doublePoints':
-      // Активируем эффект двойных очков на 7 секунд
-      player.doublePointsUntil = Date.now() + 7000; // 7 секунд
+
+    case "doublePoints":
+      //activate double points effect for 7 seconds
+      player.doublePointsUntil = Date.now() + 7000;
       break;
-      
-    case 'magnet':
-      // Активируем эффект магнита на 6 секунд
-      player.magnetUntil = Date.now() + 6000; // 6 секунд
+
+    case "magnet":
+      //activate magnet effect for 6 seconds
+      player.magnetUntil = Date.now() + 6000;
       break;
-      
-    case 'freeze':
-      // Замораживаем игрока на 4 секунды
-      player.frozenUntil = Date.now() + 4000; // 4 секунды
+
+    case "freeze":
+      //freeze player for 4 seconds
+      player.frozenUntil = Date.now() + 4000;
       break;
-      
-    case 'confusion':
-      // Путаем управление игрока на 6 секунд
-      player.confusedUntil = Date.now() + 6000; // 6 секунд
+
+    case "confusion":
+      //confuse player controls for 6 seconds
+      player.confusedUntil = Date.now() + 6000;
       break;
-      
-    case 'poison':
-      // Отравляем игрока на 6 секунд (-1 очко каждые 2 секунды)
-      player.poisonedUntil = Date.now() + 6000; // 6 секунд
-      player.lastPoisonDamage = Date.now(); // Время последнего урона от яда
+
+    case "poison":
+      //poison player for 6 seconds (-1 point every 2 seconds)
+      player.poisonedUntil = Date.now() + 6000;
+      player.lastPoisonDamage = Date.now();
       break;
-      
-    case 'ghostMode':
-      // Активируем призрачный режим на 10 секунд - другие игроки становятся невидимыми
-      player.ghostModeUntil = Date.now() + 10000; // 10 секунд
+
+    case "ghostMode":
+      //activate ghost mode for 10 seconds
+      player.ghostModeUntil = Date.now() + 10000;
       break;
-      
-    // Здесь можно добавить другие эффекты в будущем
+
+    //other effects can be added here in future
     default:
       console.log(`Unknown effect: ${effectType}`);
   }
 }
 
-// Функция обработки магнитного эффекта (вызывается периодически)
+//magnet effect handler (called periodically)
 function processMagnetEffects(io) {
-  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
-  
+  if (state.getGameStatus() !== "started" || state.isGamePaused()) return;
+
   const players = state.getPlayers();
   let resources = state.getResources();
   let resourcesChanged = false;
   let playersChanged = false;
-  
-  // Проходим по всем игрокам с активным эффектом магнита
-  Object.values(players).forEach(player => {
+
+  //iterate all players with active magnet effect
+  Object.values(players).forEach((player) => {
     if (player.magnetUntil && Date.now() < player.magnetUntil) {
-      // Находим ресурсы в радиусе 2 клеток и автоматически собираем их
+      //find resources within 2 cells and auto collect
       const resourcesToCollect = [];
-      
+
       resources.forEach((resource, index) => {
-        const distance = Math.abs(resource.x - player.x) + Math.abs(resource.y - player.y);
+        const distance =
+          Math.abs(resource.x - player.x) + Math.abs(resource.y - player.y);
         if (distance <= 3 && distance > 0) {
-          // Магнит не подбирает бомбы автоматически - слишком опасно!
-          if (resource.type !== 'timeBomb') {
+          //magnet does not auto collect bombs - too dangerous!
+          if (resource.type !== "timeBomb") {
             resourcesToCollect.push(index);
           }
         }
       });
-      
-      // Собираем ресурсы (в обратном порядке, чтобы не сбились индексы)
+
+      //collect resources (in reverse order to keep indices correct)
       for (let i = resourcesToCollect.length - 1; i >= 0; i--) {
         const resourceIndex = resourcesToCollect[i];
         const resource = resources[resourceIndex];
-        
-        // Начисляем очки
+
+        //add points
         let points = resource.points || 0;
-        const hasDoublePoints = player.doublePointsUntil && Date.now() < player.doublePointsUntil;
+        const hasDoublePoints =
+          player.doublePointsUntil && Date.now() < player.doublePointsUntil;
         const finalPoints = hasDoublePoints ? points * 2 : points;
         player.score += finalPoints;
-        
-        // Применяем эффект ресурса, если есть
+
+        //apply resource effect if present
         if (resource.effect) {
           applyResourceEffect(player, resource.effect);
         }
-        
-        // Удаляем собранный ресурс
+
+        //remove collected resource
         resources.splice(resourceIndex, 1);
         resourcesChanged = true;
         playersChanged = true;
       }
     }
   });
-  
-  // Если что-то изменилось, отправляем обновления
+
+  //if something changed, send updates
   if (resourcesChanged) {
     state.setResources(resources);
-    io.emit('updateResources', resources);
+    io.emit("updateResources", resources);
   }
-  
+
   if (playersChanged) {
-    io.emit('updatePlayers', state.getPlayers());
+    io.emit("updatePlayers", state.getPlayers());
   }
 }
 
-// Функция обработки бомб (вызывается периодически)
+//bomb handler (called periodically)
 function processBombEffects(io) {
-  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
-  
+  if (state.getGameStatus() !== "started" || state.isGamePaused()) return;
+
   let resources = state.getResources();
   const players = state.getPlayers();
   let resourcesChanged = false;
   let playersChanged = false;
   const currentTime = Date.now();
-  
-  // Проходим по всем бомбам
+
+  //iterate all bombs
   const bombsToExplode = [];
   resources.forEach((resource, index) => {
-    if (resource.type === 'timeBomb' && resource.explodeTime <= currentTime) {
+    if (resource.type === "timeBomb" && resource.explodeTime <= currentTime) {
       bombsToExplode.push({ index, resource });
     }
   });
-  
-  // Обрабатываем взрывы бомб
+
+  //handle bomb explosions
   for (let i = bombsToExplode.length - 1; i >= 0; i--) {
     const { index, resource: bomb } = bombsToExplode[i];
-    
-    // Наносим урон игрокам в радиусе взрыва
-    Object.values(players).forEach(player => {
-      const distance = Math.abs(bomb.x - player.x) + Math.abs(bomb.y - player.y);
+
+    //deal damage to players in explosion radius
+    Object.values(players).forEach((player) => {
+      const distance =
+        Math.abs(bomb.x - player.x) + Math.abs(bomb.y - player.y);
       if (distance <= 3) {
-        player.score = Math.max(0, player.score - 3); // Не даем счету уйти в минус
+        //do not allow score to go negative
+        player.score = Math.max(0, player.score - 3);
         playersChanged = true;
       }
     });
-    
-    // Удаляем другие ресурсы в радиусе взрыва
+
+    //remove other resources in explosion radius
     const resourcesToRemove = [];
     resources.forEach((resource, resIndex) => {
-      if (resIndex !== index) { // Не удаляем саму бомбу пока
-        const distance = Math.abs(bomb.x - resource.x) + Math.abs(bomb.y - resource.y);
+      if (resIndex !== index) {
+        //do not remove bomb itself yet
+        const distance =
+          Math.abs(bomb.x - resource.x) + Math.abs(bomb.y - resource.y);
         if (distance <= 3) {
           resourcesToRemove.push(resIndex);
         }
       }
     });
-    
-    // Удаляем ресурсы в обратном порядке
-    resourcesToRemove.sort((a, b) => b - a).forEach(resIndex => {
-      resources.splice(resIndex, 1);
-      resourcesChanged = true;
-    });
-    
-    // Корректируем индекс бомбы после удаления других ресурсов
+
+    //remove resources in reverse order
+    resourcesToRemove
+      .sort((a, b) => b - a)
+      .forEach((resIndex) => {
+        resources.splice(resIndex, 1);
+        resourcesChanged = true;
+      });
+
+    //correct bomb index after removing other resources
     let correctedBombIndex = index;
-    resourcesToRemove.forEach(removedIndex => {
+    resourcesToRemove.forEach((removedIndex) => {
       if (removedIndex < index) {
         correctedBombIndex--;
       }
     });
-    
-    // Удаляем саму бомбу
+
+    //remove bomb itself
     resources.splice(correctedBombIndex, 1);
     resourcesChanged = true;
-    
-    // Отправляем эффект взрыва клиентам
-    io.emit('bombExplosion', { x: bomb.x, y: bomb.y });
+
+    //send explosion effect to clients
+    io.emit("bombExplosion", { x: bomb.x, y: bomb.y });
   }
-  
-  // Если что-то изменилось, отправляем обновления
+
+  //if something changed, send updates
   if (resourcesChanged) {
     state.setResources(resources);
-    io.emit('updateResources', resources);
+    io.emit("updateResources", resources);
   }
-  
+
   if (playersChanged) {
-    io.emit('updatePlayers', state.getPlayers());
+    io.emit("updatePlayers", state.getPlayers());
   }
 }
 
-// Функция обработки ядовитых эффектов (вызывается каждые 2 секунды)
+//poison effect handler (called every 2 seconds)
 function processPoisonEffects(io) {
-  if (state.getGameStatus() !== 'started' || state.isGamePaused()) return;
-  
+  if (state.getGameStatus() !== "started" || state.isGamePaused()) return;
+
   const players = state.getPlayers();
   let playersChanged = false;
   const currentTime = Date.now();
-  
-  // Проходим по всем игрокам с активным эффектом яда
-  Object.values(players).forEach(player => {
+
+  //iterate all players with active poison effect
+  Object.values(players).forEach((player) => {
     if (player.poisonedUntil && currentTime < player.poisonedUntil) {
-      // Проверяем, прошло ли 2 секунды с последнего урона
+      //check if 2 seconds passed since last poison damage
       if (currentTime - (player.lastPoisonDamage || 0) >= 2000) {
-        // Наносим урон от яда (-1 очко)
+        //deal poison damage (-1 point)
         player.score = Math.max(0, player.score - 1);
         player.lastPoisonDamage = currentTime;
         playersChanged = true;
       }
     }
   });
-  
-  // Если что-то изменилось, отправляем обновления
+
+  //if something changed, send updates
   if (playersChanged) {
-    io.emit('updatePlayers', state.getPlayers());
+    io.emit("updatePlayers", state.getPlayers());
   }
 }
 
@@ -422,5 +499,5 @@ module.exports = {
   pickResourceTypeWeighted,
   processMagnetEffects,
   processBombEffects,
-  processPoisonEffects
+  processPoisonEffects,
 };

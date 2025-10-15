@@ -1,4 +1,3 @@
-// Константы игры
 export const GRID = {
   COLS: 20,
   ROWS: 20,
@@ -30,6 +29,3 @@ export const AUDIO_SETTINGS = {
   DEFAULT_ENABLED: true,
   STORAGE_KEY: 'audio-settings'
 };
-
-// Типы ресурсов определяются на сервере и приходят через сокеты
-// Никакого дублирования констант!

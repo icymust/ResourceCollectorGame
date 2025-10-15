@@ -1,6 +1,6 @@
 import { state, setMyId, setConnected, setPaused, setPlayers, setResources } from './state.js';
 import { updatePlayers, updateResources, showBombExplosion } from './render.js';
-import { updateLobby, updateTimer, showGameEnded, showGameQuit, showPauseOverlay } from './ui.js';
+import { updateLobby, updateTimer, showGameEnded, showGameQuit, showPauseOverlay, playEndSound, playStartSound } from './ui.js';
 import { audioManager } from './audio.js';
 
 let socket = null;
@@ -8,7 +8,6 @@ let socket = null;
 export function connect() {
   socket = io();
   
-  // Соединение
   socket.on('connect', () => {
     setMyId(socket.id);
     setConnected(true);
@@ -24,19 +23,21 @@ export function connect() {
     updateStatus('connecting');
   });
 
-  // Лобби
   socket.on('updateLobby', (data) => {
+  const queueEl = document.getElementById('queue-container');
+  if (queueEl) queueEl.style.display = 'none';
     updateLobby(data);
   });
 
-  // Игровые события
   socket.on('gameStarted', (data) => {
+  const queueEl = document.getElementById('queue-container');
+  if (queueEl) queueEl.style.display = 'none';
+    playStartSound();
     setPlayers(data.players);
     setResources(data.resources);
     updatePlayers(data.players);
     updateResources(data.resources);
     
-    // Показываем игровой экран
     const lobby = document.getElementById('lobby');
     const gameContainer = document.getElementById('game-container');
     const pauseOverlay = document.getElementById('pause-overlay');
@@ -46,6 +47,24 @@ export function connect() {
     gameContainer.style.display = 'block';
     pauseOverlay.style.display = 'none';
     quitBtn.style.display = 'inline-block';
+  });
+
+  // queue updates for players not in current round
+  socket.on('updateQueue', (data) => {
+    const lobby = document.getElementById('lobby');
+    const gameContainer = document.getElementById('game-container');
+    let queueEl = document.getElementById('queue-container');
+    if (!queueEl) {
+      queueEl = document.createElement('div');
+      queueEl.id = 'queue-container';
+      queueEl.style.cssText = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;';
+      document.body.appendChild(queueEl);
+    }
+    lobby.style.display = 'none';
+    gameContainer.style.display = 'none';
+    queueEl.style.display = 'flex';
+    const names = (data.queue || []).map(p => p.name || 'Player').join(', ');
+    queueEl.textContent = `Waiting room (${data.count}): ${names}`;
   });
 
   socket.on('updatePlayers', (players) => {
@@ -58,12 +77,10 @@ export function connect() {
     updateResources(resources);
   });
 
-  // Специальное событие для воспроизведения звука сбора ресурса
   socket.on('resourceCollected', () => {
     audioManager.play('coin-pickup');
   });
 
-  // Событие взрыва бомбы
   socket.on('bombExplosion', (data) => {
     showBombExplosion(data.x, data.y);
   });
@@ -73,6 +90,7 @@ export function connect() {
   });
 
   socket.on('gameEnded', (data) => {
+    playEndSound()
     showGameEnded(data);
   });
 
@@ -84,6 +102,10 @@ export function connect() {
     setPaused(data.paused);
     showPauseOverlay(data);
   });
+
+    socket.on('alert', (err) => {
+    alert(err.message);
+    })
 }
 
 function updateStatus(status) {
@@ -102,7 +124,6 @@ function updateStatus(status) {
   }
 }
 
-// Эмиттеры
 export const emitMove = (direction) => socket.emit('move', direction);
 export const emitPause = (paused, by) => socket.emit('togglePause', { paused, by });
 export const emitQuit = (by) => socket.emit('quitGame', { by });
@@ -110,3 +131,4 @@ export const emitReady = () => socket.emit('setReady');
 export const emitStart = () => socket.emit('startGame');
 export const emitSetGameTime = (seconds) => socket.emit('setGameTime', seconds);
 export const emitSetPlayerInfo = (info, callback) => socket.emit('setPlayerInfo', info, callback);
+export const emitRestart = () => socket.emit('restartGame');

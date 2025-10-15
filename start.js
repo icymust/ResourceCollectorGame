@@ -4,18 +4,18 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('🎮 Starting Resource Collector Game...');
+console.log('Starting Resource Collector Game...');
 
-// Проверяем наличие package.json
+//package.json
 if (!fs.existsSync('package.json')) {
-    console.error('❌ Error: package.json not found!');
+    console.error('Error: package.json not found!');
     console.error('Please run this script from the game directory.');
     process.exit(1);
 }
 
-// Проверяем наличие зависимостей
+//node mod
 if (!fs.existsSync('node_modules')) {
-    console.log('📦 Installing dependencies...');
+    console.log('Installing dependencies...');
     
     const npmInstall = spawn('npm', ['install'], {
         stdio: 'inherit',
@@ -24,7 +24,7 @@ if (!fs.existsSync('node_modules')) {
     
     npmInstall.on('close', (code) => {
         if (code !== 0) {
-            console.error('❌ Error: Failed to install dependencies!');
+            console.error('Error: Failed to install dependencies!');
             process.exit(1);
         }
         startServer();
@@ -33,17 +33,17 @@ if (!fs.existsSync('node_modules')) {
     startServer();
 }
 
+//start
 function startServer() {
-    console.log('🚀 Starting server on http://localhost:3000');
+    console.log('Starting server on http://localhost:3000');
     console.log('Press Ctrl+C to stop the server');
     console.log('');
     
-    // Автоматически открываем браузер через 2 секунды
+    //open browser
     setTimeout(() => {
         const open = require('child_process').exec;
         const url = 'http://localhost:3000';
         
-        // Определяем команду для открытия браузера по ОС
         let cmd;
         switch (process.platform) {
             case 'darwin':
@@ -58,24 +58,24 @@ function startServer() {
         
         open(cmd, (error) => {
             if (!error) {
-                console.log('🌐 Opening browser...');
+                console.log('Opening browser...');
             }
         });
     }, 2000);
     
-    // Запускаем сервер
+    //Start serv
     const server = spawn('node', ['src/server.js'], {
         stdio: 'inherit',
         shell: true
     });
     
     server.on('close', (code) => {
-        console.log(`\n👋 Server stopped with code ${code}`);
+        console.log(`\nServer stopped with code ${code}`);
     });
     
-    // Обрабатываем Ctrl+C
+    //Ctrl+C
     process.on('SIGINT', () => {
-        console.log('\n🛑 Stopping server...');
+        console.log('\nStopping server...');
         server.kill();
         process.exit(0);
     });

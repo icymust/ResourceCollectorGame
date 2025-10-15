@@ -1,10 +1,7 @@
-// Глобальное состояние клиента
 export const state = {
-  // Сеть
   myId: null,
   connected: false,
   
-  // Игровое состояние
   paused: false,
   gameStatus: 'lobby', // 'lobby' | 'playing'
   gameTime: 60,
@@ -15,16 +12,15 @@ export const state = {
   players: {},
   resources: [],
   
-  // UI состояние
   quitModalOpen: false
 };
 
-// Геттеры
+//get
 export const getMyPlayer = () => state.players[state.myId];
 export const isHost = () => state.myId === state.hostId;
 export const getAllPlayers = () => Object.values(state.players);
 
-// Сеттеры
+//set
 export const setMyId = (id) => { state.myId = id; };
 export const setConnected = (connected) => { state.connected = connected; };
 export const setPaused = (paused) => { state.paused = paused; };
